@@ -7,12 +7,13 @@
 
         <!-- Desktop Menu -->
         <div class="hidden lg:flex space-x-6">
-            <a href="#" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">HOME</a>
+            <a href="About us" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">HOME</a>
 
             <!-- About Us Dropdown -->
             <div x-data="{ isHovering: false }" class="relative group" @mouseover="isHovering = true" @mouseleave="isHovering = false">
-                <button class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">
+                <button class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100"><a href="pages/about.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">
                     ABOUT US
+                    
                 </button>
                 <!-- Dropdown Menu -->
                 <div x-show="isHovering" x-transition:leave="transition-opacity duration-400" class="absolute left-0 mt-2 bg-white text-gray-700 rounded-lg shadow-lg w-48">
