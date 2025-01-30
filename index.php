@@ -1,5 +1,7 @@
 <?php
-// Save this as index.php and make sure you have Tailwind CSS properly integrated in your project.
+include 'conn.php';
+include 'components/header.php';
+include 'components/navbar.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,9 +12,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
-    <?php include 'components/header.php'; ?>
-    <?php include 'components/navbar.php'; ?>
-    <?php include 'components/footer.php'; ?>
+    
+    
 
     <!-- Hero Section -->
     <section class="bg-blue-900 text-white py-12">
@@ -99,6 +100,6 @@
     </section>
 
     <!-- Footer -->
-    
+    <?php include 'components/footer.php'; ?>
 </body>
 </html>

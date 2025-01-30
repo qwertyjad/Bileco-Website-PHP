@@ -1,5 +1,5 @@
 <?php
-
+define('BASE_URL', 'http://localhost/crud/');
 class conn{
 	private $hostdb = "localhost";
 	private $userdb = "root";

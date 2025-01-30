@@ -4,7 +4,7 @@
 <!-- FontAwesome CDN -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-<header class="bg-yellow-500 text-white py-2">
+<header class="bg-[#ffdb19] text-white py-2">
     <div class="container mx-auto px-4 flex flex-col items-center md:flex-row md:justify-between text-center">
         <div class="privacy-links md:space-x-4 mb-2 md:mb-0 text-black">
             <a href="#" class="hover:underline">Privacy Policy</a>
