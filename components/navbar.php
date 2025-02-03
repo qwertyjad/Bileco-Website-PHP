@@ -1,20 +1,19 @@
 <nav x-data="{ isOpen: false }" class="relative bg-[#13274F] text-white sticky top-0 z-30">
     <div class="container px-6 py-3 mx-auto flex justify-between items-center">
         <!-- Logo -->
-        <a href="#">
-            <img class="w-auto h-12" src="assets/images/logos/logos.png" alt="Logo">
+        <a href="<?php echo BASE_URL; ?>">
+            <img src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Logo" class="w-auto h-12">
         </a>
 
         <!-- Desktop Menu -->
         <div class="hidden lg:flex space-x-6">
-            <a href="About us" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">HOME</a>
+            <a href="<?php echo BASE_URL; ?>" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">HOME</a>
 
             <!-- About Us Dropdown -->
             <div x-data="{ isHovering: false }" class="relative group" @mouseover="isHovering = true" @mouseleave="isHovering = false">
-                <button class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100"><a href="pages/about.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">
+                <a href="<?php echo BASE_URL; ?>user/about.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">
                     ABOUT US
-                    
-                </button>
+                </a>
                 <!-- Dropdown Menu -->
                 <div x-show="isHovering" x-transition:leave="transition-opacity duration-400" class="absolute left-0 mt-2 bg-white text-gray-700 rounded-lg shadow-lg w-48">
                     <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Services</a>
@@ -38,7 +37,7 @@
 
             <a href="#" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">NEWS & EVENT</a>
             <a href="#" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">DOWNLOADS</a>
-            <a href="#" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">CONTACT</a>
+            <a href="<?php echo BASE_URL; ?>user/contact.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100">CONTACT</a>
         </div>
 
         <!-- Search Bar -->
@@ -70,12 +69,15 @@
             <a href="#" class="block px-3 py-2 transition-colors duration-300 hover:text-yellow-500">HOME</a>
             <a href="#" class="block px-3 py-2 transition-colors duration-300 hover:text-yellow-500">ABOUT US</a>
             <a href="#" class="block px-3 py-2 transition-colors duration-300 hover:text-yellow-500">CONSUMER CORNER</a>
+            <a href="#" class="block px-3 py-2 transition-colors duration-300 hover:text-yellow-500">NEWS & EVENT</a>
+            <a href="#" class="block px-3 py-2 transition-colors duration-300 hover:text-yellow-500">DOWANLOADS</a>
             <a href="#" class="block px-3 py-2 transition-colors duration-300 hover:text-yellow-500">CONTACT</a>
         </div>
     </div>
-    <hr class="border-t border-white mt-0 mb-1">
+    <hr class="border-t border-white mt-0 mb-0">
 </nav>
 
 
 <!-- Alpine.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.js" defer></script>
+
