@@ -56,8 +56,8 @@ include '../components/navbar.php';
                 <li><a href="<?php echo BASE_URL; ?>user/board.php" class="text-black hover:text-blue-800 text-sm">The Board of Directors</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">The Management</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Franchise Area</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Best Practices</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Awards & Citations</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/practices.php" class="text-black hover:text-blue-800 text-sm">Best Practices</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/awards.php" class="text-black hover:text-blue-800 text-sm">Awards & Citations</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Power Sources</a></li>
             </ul>
         </div>
