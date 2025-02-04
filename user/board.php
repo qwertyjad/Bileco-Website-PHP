@@ -26,56 +26,75 @@ include '../components/navbar.php';
             <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">THE BOARD OF DIRECTORS</h2>
             <hr class="border-t-4 border-b-4 border-[ffdb19] mt-1 mb-8">
             <ol class="list-decimal pl-5 text-gray-700 space-y-3">
-
             
-    <img src="Dir.Caridad.png" alt="Board President" class="w-1/4 m-2 mt-4 ml-0"> 
-    <h1 class=" text-xl font-bold text-blue-700 text-sky-600 mb-4 text-justify">  
-                DIR. WILBERTO 
-            </h1>
-            <h1 class=" text-xl font-bold text-blue-700 text-sky-600 mb-4 text-justify">  
-                 B. CARIDAD 
-            </h1>        
+            <div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <!-- Card 1 -->
+        <div class="text-center">
+            <img src="Dir.Caridad.png" alt="Wilberto B. Caridad" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. WILBERTO B. CARIDAD</h2>
+            <p class="text-sm text-gray-600">Board President<br>Kawayan District Representative</p>
+        </div>
 
-            <div class="flex flex-col items-center"> 
-            <img src="Dir.Cordeta.png" alt="Board President" class="w-1/4 m-2 mt-4"> 
-    <h1 class=" text-xl font-bold text-blue-700 text-sky-600 mb-4 text-center">  
-                DIR. CESAR
-            </h1>
-            <h1 class=" text-xl font-bold text-blue-700 text-sky-600 mb-4 text-center">  
-                 D. CORDETA 
-            </h1>  
+        <!-- Card 2 -->
+        <div class="text-center">
+            <img src="Dir.Cordeta.png" alt="Cesar D. Cordeta" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. CESAR D. CORDETA</h2>
+            <p class="text-sm text-gray-600">Vice-President<br>Cabucgayan District Representative</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="text-center">
+            <img src="Dir.Jornales.png" alt="Salvacion C. Jornales" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. SALVACION C. JORNALES</h2>
+            <p class="text-sm text-gray-600">Secretary<br>Biliran District Representative</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="text-center">
+            <img src="Dir.Avila.png" alt="Juan R. Avila Jr." class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. JUAN R. AVILA JR.</h2>
+            <p class="text-sm text-gray-600">Member<br>Caibiran District Representative</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="text-center">
+            <img src="Dir.Caneja.png" alt="Milagros O. Caneja" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. MILAGROS O. CANEJA</h2>
+            <p class="text-sm text-gray-600">Member<br>Naval District Representative</p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="text-center">
+            <img src="Dir.Mecaydor.png" alt="Pastor M. Mecaydor" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. PASTOR M. MECAYDOR</h2>
+            <p class="text-sm text-gray-600">Member<br>Almeria District Representative</p>
+        </div>
+
+                <!-- Card 7 -->
+                <div class="text-center">
+            <img src="Dir.Devio.png" alt="Rodolfo S. Devio" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">DIR. RODOLFO S. DEVIO</h2>
+            <p class="text-sm text-gray-600">Member<br>Culaba District</>
+        </div>
+
+        <!-- Card 8 -->
+        <div class="text-center">
+            <img src="GM.png" alt="Gerardo N. Oledan" class="w-35 h-40 mx-auto rounded-lg">
+            <h2 class="text-lg font-bold mt-2 text-blue-700">ENGR. GERARDO N. OLEDAN</h2>
+            <p class="text-sm text-gray-600">Genral Member<br>Ex-Officio Member</>
+        </div>
+    </div>
 </div>
-<div class="space-y-4 mt-8">
-        <!-- Example Core Values (You Can Fetch This from Database) -->
-        <?php
-        $values = [
-            "Lightning Bolts" => "It symbolizes BILECO’s pursuit to rural electrification within its franchise area ",
-            "Seven Bolts" => "The seven bolts represent its seven corporate values, namely: Godliness, Discipline, Honesty, Excellence, Accountability, Respect and Teamwork",
-            "Biliran Map" => "It represents its franchise area where BILECO operates",
-            "Biliran Bridge" => "It serves an iconic landmark of the province which symbolize ",
-            "The Name ‘BILECO’" => "The placement of ‘BILECO’ under the bridge signifies BILECO’s role in building the foundation of a developed and progressive Biliran province through the provision of a reliable and efficient electric service",
-            "Colors Blue and Yellow" => "The official colors of BILECO",
-           
-        ];
 
-        foreach ($values as $key => $value) {
-            echo "
-                <div class='flex items-start space-x-10'>
-                    <strong class='text-gray-700 py-2 font-bold w-1/4 text-right'>$key</strong>
-                    <p class='ml-4 text-gray-700 text-justify w-3/4'>$value</p>
-                </div>
-                   ";
-        }
-        ?>
-</ol>
 </ol></div>
         <!-- Left Sidebar Section -->
         <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
             <ul class="space-y-4 text-right font-bold">
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Brief History</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Vision, Mission, & Values</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Our Logo</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/board.php" class="text-black hover:text-blue-800 text-sm">The Board of Directors</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/logo.php" class="text-black hover:text-blue-800 text-sm">Our Logo</a></li>
+                <li><a href="#" class="text-black hover:text-blue-800 text-sm">The Board of Directors</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">The Management</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Franchise Area</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Best Practices</a></li>
