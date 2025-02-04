@@ -23,47 +23,67 @@ include '../components/navbar.php';
 
         <!-- Main Content Section -->
         <div class="order-1 md:order-2 w-full md:w-3/5 bg-white p-6 rounded-md">
-            <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">VISION, MISSION & CORE VALUES</h2>
+            <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">FRANCISE AREA</h2>
             <hr class="border-t-4 border-b-4 border-[ffdb19] mt-1 mb-8">
             <ol class="list-decimal pl-5 text-gray-700 space-y-3">
-            
-<p class="text-2xl font-bold text-sky-600 mb-4"><strong>Vision</strong></p> 
-<ol class="list-decimal pl-6 space-y-4 text-blue-700 "></ol> 
-<p class="text-gray-700 text-justify py-3 s"> An electric distribution utility recognized as a hallmark of excellence by providing premium customer satisfaction by 2030."</p>  
 
-<p class="text-2xl font-bold text-sky-600 col-span-1"><strong>Mission</strong></p>  
- <ol class="text-gray-700 text-justify col-span-3 ">
-<p class="text-gray-700 text-justify">To provide reliable, safe, quality and efficient electric service for a developed and progressive Biliran province.</p>  
+            <img src="biliranmap.jpg" alt="District Map" class="mx-auto w-90 h-90">
+            <p class="text-gray-700 text-justify py-3 ">"BILECO was granted authority to operate in the seven districts of the province of Biliran, namely: Biliran, Naval, Almeria, Kawayan, Cabucgayan, Caibiran and Culaba, collectively called its Franchise Area. Likewise, it operates in off-grid island barangays of Mabini and Libertad in Higatangan island under the municipality of Naval through a diesel power plant which operates for 8 hours between 3:00 to 11:00 pm. Its area coverage covers a total land area of 508.18 sq km (196.2 sq mi), comprised of 117 barangays. It achieved its 100% barangay energization on October 21, 2006 after the successful energization of the two island barangays of Mabini and Libertad in Higatangan island."</p>
+           <p class="text-gray-700 text-justify py-3">Here are some quick facts about the seven districts as of December 31, 2021:</p>
+   
+         
 
-<p class="text-2xl font-bold text-sky-600 mt-6 mb-4"><strong>Core Values</strong></p>  
- <ol class="text-gray-700 text-justify col-span-3 ">
-<p class="text-gray-700 text-justify">As an organization which aims to create customers for life, we imbibe and abide by our seven core values which are essential in promoting a positive, innovative and harmonious working environment that supports the company’s objectives. Its acronym is</p> 
-<span class="font-bold">GoDHEART.</span>  
+<div class="container mx-auto p-6">  
+  
+    <table class="min-w-full border-gray-300 overflow-hidden ">  
+        <thead class=" text-gray-700">  
+            <tr>  
+                <th class="py-3 px-10 text-left">Districts</th>  
+                <th class="py-3 px-6 text-left">Land Area (sq km)</th>  
+                <th class="py-3 px-6 text-left">No. of Brgys</th>  
+                <th class="py-3 px-6 text-left">House Connections</th>  
+            </tr>  
+        </thead>  
+        <tbody>  
+            <?php  
+            $districts = [  
+                ['name' => 'Almeria', 'land_area' => 57.46, 'brgys' => 13, 'connections' => 5382],  
+                ['name' => 'Biliran', 'land_area' => 70.30, 'brgys' => 11, 'connections' => 4900],  
+                ['name' => 'Cabucgayan', 'land_area' => 54.19, 'brgys' => 13, 'connections' => 4397],  
+                ['name' => 'Caibiran', 'land_area' => 83.55, 'brgys' => 17, 'connections' => 5933],  
+                ['name' => 'Culaba', 'land_area' => 73.42, 'brgys' => 17, 'connections' => 3820],  
+                ['name' => 'Kawayan', 'land_area' => 61.02, 'brgys' => 20, 'connections' => 4891],  
+                ['name' => 'Naval', 'land_area' => 108.24, 'brgys' => 26, 'connections' => 14634],  
+            ];  
 
-<div class="space-y-4 mt-8">
-        <!-- Example Core Values (You Can Fetch This from Database) -->
-        <?php
-        $values = [
-            "GODLINESS" => "We acknowledge God as the source of our existence and the source of all power and strength.",
-            "DISCIPLINE" => "We abide by the policies and rules and observe propriety in dealing with internal and external customers.",
-            "HONESTY" => "We believe that truthfulness and honesty can make the best relationships because it leads to trust and confidence.",
-            "EXCELLENCE" => "We strive to provide quality services and continue raising the bar of excellence in all areas of our operation.",
-            "ACCOUNTABILITY" => "We take full responsibility in our actions and decisions.",
-            "RESPECT" => "We share equal respect to all our associates, peers, stakeholders, and member-consumers.",
-            "TEAMWORK" => "We work together as one to achieve our common vision."
-        ];
+            $totalLandArea = 0;  
+            $totalBrgys = 0;  
+            $totalConnections = 0;  
 
-        foreach ($values as $key => $value) {
-            echo "
-                <div class='flex items-start space-x-10'>
-                    <strong class='text-gray-700 py-2 font-bold w-1/4 text-right'>$key</strong>
-                    <p class='ml-4 text-gray-700 text-justify w-3/4'>$value</p>
-                </div>
-                   ";
-        }
-        ?>
-</ol>
-</ol></div>
+            foreach ($districts as $district) {  
+                echo '<tr class="border-b text-gray-700">';  
+                echo '<td class="py-3 px-10">' . $district['name'] . '</td>';  
+                echo '<td class="py-3 px-10">' . $district['land_area'] . '</td>';  
+                echo '<td class="py-3 px-10">' . $district['brgys'] . '</td>';  
+                echo '<td class="py-3 px-10">' . $district['connections'] . '</td>';  
+                echo '</tr>';  
+
+                // Calculate totals  
+                $totalLandArea += $district['land_area'];  
+                $totalBrgys += $district['brgys'];  
+                $totalConnections += $district['connections'];  
+            }  
+            ?>  
+            <tr class="font-bold ">  
+                <td class="py-3 px-10">Total</td>  
+                <td class="py-3 px-10"><?php echo number_format($totalLandArea, 2); ?></td>  
+                <td class="py-3 px-10"><?php echo $totalBrgys; ?></td>  
+                <td class="py-3 px-10"><?php echo $totalConnections; ?></td>  
+            </tr>  
+        </tbody>  
+    </table>  
+   </div>
+        </div>
         <!-- Left Sidebar Section -->
         <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
             <ul class="space-y-8 text-right font-bold">

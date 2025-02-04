@@ -23,47 +23,38 @@ include '../components/navbar.php';
 
         <!-- Main Content Section -->
         <div class="order-1 md:order-2 w-full md:w-3/5 bg-white p-6 rounded-md">
-            <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">VISION, MISSION & CORE VALUES</h2>
+            <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">POWER SOURCES</h2>
             <hr class="border-t-4 border-b-4 border-[ffdb19] mt-1 mb-8">
             <ol class="list-decimal pl-5 text-gray-700 space-y-3">
+
             
-<p class="text-2xl font-bold text-sky-600 mb-4"><strong>Vision</strong></p> 
-<ol class="list-decimal pl-6 space-y-4 text-blue-700 "></ol> 
-<p class="text-gray-700 text-justify py-3 s"> An electric distribution utility recognized as a hallmark of excellence by providing premium customer satisfaction by 2030."</p>  
-
-<p class="text-2xl font-bold text-sky-600 col-span-1"><strong>Mission</strong></p>  
- <ol class="text-gray-700 text-justify col-span-3 ">
-<p class="text-gray-700 text-justify">To provide reliable, safe, quality and efficient electric service for a developed and progressive Biliran province.</p>  
-
-<p class="text-2xl font-bold text-sky-600 mt-6 mb-4"><strong>Core Values</strong></p>  
- <ol class="text-gray-700 text-justify col-span-3 ">
-<p class="text-gray-700 text-justify">As an organization which aims to create customers for life, we imbibe and abide by our seven core values which are essential in promoting a positive, innovative and harmonious working environment that supports the company’s objectives. Its acronym is</p> 
-<span class="font-bold">GoDHEART.</span>  
-
-<div class="space-y-4 mt-8">
-        <!-- Example Core Values (You Can Fetch This from Database) -->
-        <?php
-        $values = [
-            "GODLINESS" => "We acknowledge God as the source of our existence and the source of all power and strength.",
-            "DISCIPLINE" => "We abide by the policies and rules and observe propriety in dealing with internal and external customers.",
-            "HONESTY" => "We believe that truthfulness and honesty can make the best relationships because it leads to trust and confidence.",
-            "EXCELLENCE" => "We strive to provide quality services and continue raising the bar of excellence in all areas of our operation.",
-            "ACCOUNTABILITY" => "We take full responsibility in our actions and decisions.",
-            "RESPECT" => "We share equal respect to all our associates, peers, stakeholders, and member-consumers.",
-            "TEAMWORK" => "We work together as one to achieve our common vision."
-        ];
-
-        foreach ($values as $key => $value) {
-            echo "
-                <div class='flex items-start space-x-10'>
-                    <strong class='text-gray-700 py-2 font-bold w-1/4 text-right'>$key</strong>
-                    <p class='ml-4 text-gray-700 text-justify w-3/4'>$value</p>
+            <p class="text-gray-700 text-justify py-3 ">For the year 2021, BILECO had purchased a total of 51,832,813.54 kWH of power from the following sources:</p>
+            
+            <body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-4/3 space-y-7">
+        <div>
+            <p class="text-blue-500 font-semibold py-2">GN Power Dinginin, Ltd. Co.</p>
+            <div class="w-full bg-gray-300 triangle-lg h-6 overflow-hidden">
+                <div x-data="{width: 0}" x-init="setTimeout(() => width = 90, 500)"
+                     class="h-full bg-blue-400 text-white text-sm flex items-center justify-center transition-all duration-1000"
+                     :style="`width: ${width}%`">
+                    <span x-text="`${width}%`"></span>
                 </div>
-                   ";
-        }
-        ?>
-</ol>
-</ol></div>
+            </div>
+        </div>
+
+        <div>
+            <p class="text-blue-500 font-semibold py-2">Wholesale Electricity Spot Market (WESM)</p>
+            <div class="w-full bg-gray-300 tringle-lg h-6 overflow-hidden">
+                <div x-data="{width: 0}" x-init="setTimeout(() => width = 10, 500)"
+                     class="h-full bg-blue-400 text-white text-sm flex items-center justify-center transition-all duration-1000"
+                     :style="`width: ${width}%`">
+                    <span x-text="`${width}%`"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
         <!-- Left Sidebar Section -->
         <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
             <ul class="space-y-8 text-right font-bold">
@@ -75,7 +66,7 @@ include '../components/navbar.php';
                 <li><a href="<?php echo BASE_URL; ?>user/Francise.php" class="text-black hover:text-blue-800 text-sm">Franchise Area</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Best Practices</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Awards & Citations</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Power Sources</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/power.php" class="text-black hover:text-blue-800 text-sm">Power Sources</a></li>
             </ul>
         </div>
 
@@ -122,3 +113,4 @@ include '../components/footer.php';
 
 </body>
 </html>
+       

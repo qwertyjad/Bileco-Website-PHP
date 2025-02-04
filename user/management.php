@@ -23,47 +23,104 @@ include '../components/navbar.php';
 
         <!-- Main Content Section -->
         <div class="order-1 md:order-2 w-full md:w-3/5 bg-white p-6 rounded-md">
-            <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">VISION, MISSION & CORE VALUES</h2>
+            <h2 class="text-2xl font-bold text-[#87CEEB] mb-4">THE MANAGEMENT</h2>
             <hr class="border-t-4 border-b-4 border-[ffdb19] mt-1 mb-8">
             <ol class="list-decimal pl-5 text-gray-700 space-y-3">
+
             
-<p class="text-2xl font-bold text-sky-600 mb-4"><strong>Vision</strong></p> 
-<ol class="list-decimal pl-6 space-y-4 text-blue-700 "></ol> 
-<p class="text-gray-700 text-justify py-3 s"> An electric distribution utility recognized as a hallmark of excellence by providing premium customer satisfaction by 2030."</p>  
+            <div class="grid grid-cols-2 gap-16">  
+        <?php  
+        $teamMembers = [  
+            [  
+                'name' => 'ENGR. GERARDO N. OLEDAN',  
+                'title' => 'General Manager',  
+                'image' => 'GM.jpg'  
+            ],  
+            [  
+                'name' => 'MAUREEN D. NIERRA, CPA',  
+                'title' => 'Internal Auditor',  
+                'image' => 'Mam-Maureen.jpg'  
+            ],  
+            [  
+                'name' => 'MA. LEIZYL Q. GARCIA',  
+                'title' => 'Finance Services Department',  
+                'image' => 'Mam-Liezyl.jpg'  
+            ],  
+            [  
+                'name' => 'ALLAN JOSEPH S. BORRINAGA',  
+                'title' => 'Institutional Services',  
+                'image' => 'Sir-Allan.jpg'  
+            ],  
+            [  
+                'name' => 'CARLITUS CAE B. CASINILLO',  
+                'title' => 'Technical Services Department Manager',  
+                'image' => 'Tsip-LItong.jpg'  
+            ],  
+            [  
+                'name' => 'VACANT',  
+                'title' => 'Regulatory and Compliance Officer',  
+                'image' => 'logo.png'  
+            ],  
+            [  
+                'name' => 'JEFERSON G. HOLOYOHOY',  
+                'title' => 'System Administrator',  
+                'image' => 'logo.png'  
+            ],  
+            [  
+                'name' => 'JOHN M. MOCORRO',  
+                'title' => 'WESM TRADER OFFICER',  
+                'image' => 'logo.png'  
+            ],  
+            [  
+                'name' => 'MICHAEL M. GABING',  
+                'title' => 'Human Resource & Administration Supervisor',  
+                'image' => 'Sir-Mike.jpg'  
+            ],  
+            [  
+                'name' => 'ANN MARIE B. MERACAP',  
+                'title' => 'Executive Secretary',  
+                'image' => 'logo.png'  
+            ],  
+            [  
+                'name' => 'ENGR. EDRICH C. SACARE',  
+                'title' => 'Operational, Maintenance and Special Equipment Supervisor',  
+                'image' => 'logo.png'  
+            ],  
+            [  
+                'name' => 'MA. ROSARIO R. BANTOLA',  
+                'title' => 'Accountant',  
+                'image' => 'Mam-Lotlot.jpg'  
+            ],  
+            [  
+                'name' => 'RAZEL Q. CASAS',  
+                'title' => 'Meter Reading, Billing & Collection (MRBC) Supervisor',  
+                'image' => 'Mam-Raz.jpg'  
+            ],  
+            [  
+                'name' => 'VACANT',  
+                'title' => 'Area 1 Engineer',  
+                'image' => 'logo.png'  
+            ],  
+            [  
+                'name' => 'LUCRECIO S. VIDAL, REE',  
+                'title' => 'Area 2 Engineer',  
+                'image' => 'Engr-Vidal.jpg'  
+            ],  
+        ];  
 
-<p class="text-2xl font-bold text-sky-600 col-span-1"><strong>Mission</strong></p>  
- <ol class="text-gray-700 text-justify col-span-3 ">
-<p class="text-gray-700 text-justify">To provide reliable, safe, quality and efficient electric service for a developed and progressive Biliran province.</p>  
+        foreach ($teamMembers as $member) {  
+            echo '<div class="flex flex-col items-center text-center  ">';  
+            echo '<img src="' . $member['image'] . '" alt="' . $member['name'] . '" class=" w-40 h-40 object-cover">';  
+            echo '<h2 class="text-lg font-semibold text-blue-600">' . $member['name'] . '</h2>';  
+            echo '<p class="text-gray-700">' . $member['title'] . '</p>';  
+            echo '</div>';  
+        }  
+        ?>  
+   
 
-<p class="text-2xl font-bold text-sky-600 mt-6 mb-4"><strong>Core Values</strong></p>  
- <ol class="text-gray-700 text-justify col-span-3 ">
-<p class="text-gray-700 text-justify">As an organization which aims to create customers for life, we imbibe and abide by our seven core values which are essential in promoting a positive, innovative and harmonious working environment that supports the company’s objectives. Its acronym is</p> 
-<span class="font-bold">GoDHEART.</span>  
-
-<div class="space-y-4 mt-8">
-        <!-- Example Core Values (You Can Fetch This from Database) -->
-        <?php
-        $values = [
-            "GODLINESS" => "We acknowledge God as the source of our existence and the source of all power and strength.",
-            "DISCIPLINE" => "We abide by the policies and rules and observe propriety in dealing with internal and external customers.",
-            "HONESTY" => "We believe that truthfulness and honesty can make the best relationships because it leads to trust and confidence.",
-            "EXCELLENCE" => "We strive to provide quality services and continue raising the bar of excellence in all areas of our operation.",
-            "ACCOUNTABILITY" => "We take full responsibility in our actions and decisions.",
-            "RESPECT" => "We share equal respect to all our associates, peers, stakeholders, and member-consumers.",
-            "TEAMWORK" => "We work together as one to achieve our common vision."
-        ];
-
-        foreach ($values as $key => $value) {
-            echo "
-                <div class='flex items-start space-x-10'>
-                    <strong class='text-gray-700 py-2 font-bold w-1/4 text-right'>$key</strong>
-                    <p class='ml-4 text-gray-700 text-justify w-3/4'>$value</p>
-                </div>
-                   ";
-        }
-        ?>
-</ol>
-</ol></div>
+       </div>
+    </div>
+        <!-- Left Sidebar Section -->
         <!-- Left Sidebar Section -->
         <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
             <ul class="space-y-8 text-right font-bold">
