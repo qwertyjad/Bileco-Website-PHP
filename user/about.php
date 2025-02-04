@@ -14,6 +14,8 @@ include '../components/navbar.php';
 </head>
 <body class="bg-white">
 
+
+
 <!-- Header Image -->  
 <div class="w-full">  
         <img src="power.jpg" alt="Header Image" class="w-full h-64 object-cover rounded-md ">  
@@ -97,8 +99,8 @@ include '../components/navbar.php';
         </div>
 
     </div>
-    <footer class="bg-gray-800 text-white text-center py-4 mt-8 w-full">
-    <p>© 2025 Biliran Electric Cooperative, Inc. All rights reserved.</p>
-</footer>
+    <?php
+include '../components/footer.php';
+    ?>
 </body>
 </html>
