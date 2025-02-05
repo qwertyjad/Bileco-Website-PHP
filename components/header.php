@@ -3,11 +3,12 @@
 ?>
 <!-- FontAwesome CDN -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
 
 <header class="bg-[#ffdb19] text-white py-2">
     <div class="container mx-auto px-4 flex flex-col items-center md:flex-row md:justify-between text-center">
         <div class="privacy-links md:space-x-4 mb-2 md:mb-0 text-black">
-            <a href="#" class="hover:underline">Privacy Policy</a>
+            <a href="<?php echo BASE_URL; ?>user/privacy.php" class="hover:underline">Privacy Policy</a>
             <a href="#" class="hover:underline">Bids & Awards</a>
         </div>
         <div class="social-header flex flex-wrap justify-center space-x-4 text-black">

@@ -1,5 +1,6 @@
 <?php
 define('BASE_URL', 'http://localhost/crud/');
+
 class conn{
 	private $hostdb = "localhost";
 	private $userdb = "root";
@@ -22,3 +23,4 @@ class conn{
 	}
 }
 ?> 
+<link rel="icon" href="./assets/favicon.ico" type="image/x-icon">

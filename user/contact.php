@@ -4,7 +4,6 @@ include '../components/header.php';
 include '../components/navbar.php';
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,74 +13,46 @@ include '../components/navbar.php';
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
+    <!-- Header Image -->
+    <?php
+        echo '<div class="header-image w-full h-[250px] overflow-hidden">';
+        echo '<img src="' . 'https://images.unsplash.com/photo-1534504969382-fec3d9ffdd73?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8' . '" alt="Bridge" class="w-full h-full object-cover" />';
+        echo '</div>';
+    ?>
+       
+    <!-- Main Content -->
+    <div class="my-12 px-4 md:px-20">
+        <div class="flex flex-col md:flex-row gap-10">
+            <!-- Map Section -->
+            <div class="map-section w-full md:w-2/3 rounded-lg overflow-hidden">
+                <h1 class="text-3xl font-bold text-[#87CEEB] mb-4">CONTACT US</h1>
+                <hr class="border-t-4 border-b-4 border-[ffdb19] mt-1 mb-8">
 
-<div class="header-image">
-    <img src="<?= 'https://www.biliranisland.com/wp-content/uploads/2016/03/Biliran-Bridge-5-1030x773.jpg' ?>" alt="Bridge" />
-</div>
-<style>
-    .header-image {
-        width: 100%;
-        height: 300px; /* You can adjust this height */
-        overflow: hidden; /* Ensures content doesn’t overflow */
-    }
+                <div class="map-container w-full h-[400px]">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31692.869493409205!2d124.3784586345783!3d11.573076350676893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33085f4e66e0a3d1%3A0x653e1e0b00cc89bb!2sNaval%2C%20Biliran!5e0!3m2!1sen!2sph!4v1677086501027!5m2!1sen!2sph" class="w-full h-full border-none" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
 
-    .header-image img {
-        width: 100%;
-        height: 100%; /* Make sure the image fills the container's height */
-        object-fit: cover; /* Keeps the aspect ratio and fills the container */
-    }
-</style>
+            <!-- Contact Form Section -->
+            <div class="contact-us w-full md:w-1/3 rounded-lg p-8">
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">Get in touch with us:</h1>
+                <p class="text-gray-600 mb-4">We would love to hear from you! Please fill out the form below.</p>
+                <form method="post" class="space-y-6">
+                    <input type="text" name="name" placeholder="Your Name" required class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                    <input type="email" name="email" placeholder="Your Email" required class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                    <textarea name="message" placeholder="Your Message" required class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"></textarea>
+                    <button type="submit" class="w-full bg-[#002D62] text-white p-4 rounded-lg hover:bg-[#ffdb19] focus:outline-none focus:ring-2 focus:ring-blue-600">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
-<style>
     
-.map-section {
-    text-align: center;
-    margin: 20px auto; /* Add some space around the map section */
-    flex: 10;
-}
-
-.map-container {
-    width: 100%; /* Makes sure the container spans the full width */
-    max-width: 800px; /* Optional: Set a maximum width for the map */
-    margin: 0 auto; /* Centers the map */
-   
-}
-
-.responsive-map {
-    width: 100%; /* Make the map responsive to the container's width */
-    height: 400px; /* Adjust the height as needed */
-    border: none; /* Removes border if it's unnecessary */
-}
-
-.map-section h3 {
-    text-align: start;
-    min-width: 300px; /* Ensures map is not too small */
-    font-family: Arial, sans-serif;
-    font-size: 30px;
-    font-weight: bold;
-    color:#00aced;
-}
-</style>
-
-<div class="container mx-auto p-4 text-center">
-<div class="map-container">
-    <iframe src="<?= 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31692.869493409205!2d124.3784586345783!3d11.573076350676893!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33085f4e66e0a3d1%3A0x653e1e0b00cc89bb!2sNaval%2C%20Biliran!5e0!3m2!1sen!2sph!4v1677086501027!5m2!1sen!2sph' ?>"
-        class="responsive-map" style="border:0;" allowfullscreen="" loading="lazy">
-    </iframe>
-
-    <h1 class="text-3xl font-bold text-gray-800 mb-4">Contact Us</h1>
-    <p class="text-lg text-gray-600">Get in touch with us using the form below.</p>
-    <form method="post" class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-        <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 mb-4 border border-gray-300 rounded-lg">
-        <input type="email" name="email" placeholder="Your Email" required class="w-full p-3 mb-4 border border-gray-300 rounded-lg">
-        <textarea name="message" placeholder="Your Message" required class="w-full p-3 mb-4 border border-gray-300 rounded-lg"></textarea>
-        <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">Send</button>
-    </form>
 </div>
-</div>
-<?php
-// Include footer
-include '../components/footer.php';
-?>
+
+    <?php
+    include '../components/links.php';
+    include '../components/footer.php';
+    ?>
 </body>
 </html>

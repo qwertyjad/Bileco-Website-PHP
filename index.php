@@ -9,38 +9,49 @@ include 'components/navbar.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BILECO</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans">
     
     
 
-    <!-- Hero Section -->
-    <section class="bg-blue-900 text-white py-12">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-3xl font-bold">Biliran Electric Cooperative, Inc.</h2>
-            <p class="text-lg">Brgy. Caraycaray, Naval, Biliran</p>
-            <p class="mt-4 italic">"We serve, because we care."</p>
-        </div>
-    </section>
+<!-- Header Section -->
+<section class="bg-blue-900 text-white py-12">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold">Biliran Electric Cooperative, Inc.</h2>
+        <p class="text-lg mt-2">Brgy. Caraycaray, Naval, Biliran</p>
+        <p class="mt-4 italic">"We serve, because we care."</p>
+    </div>
+</section>
 
-    <!-- Vision, Mission, Core Values -->
-    <section class="bg-gray-200 py-8">
-        <div class="container mx-auto px-4 grid md:grid-cols-3 gap-4 text-center md:text-left">
-            <div>
-                <h3 class="text-xl font-semibold">Vision</h3>
-                <p>An electric distribution utility recognized as a hallmark of excellence by providing premium customer satisfaction by 2030.</p>
-            </div>
-            <div>
-                <h3 class="text-xl font-semibold">Mission</h3>
-                <p>To provide reliable, safe, quality, and efficient electric service for a developed and progressive Biliran Province.</p>
-            </div>
-            <div>
-                <h3 class="text-xl font-semibold">Core Values</h3>
-                <p>Godliness | Discipline | Honesty | Excellence | Accountability | Respect | Teamwork</p>
+<!-- Vision, Mission, Core Values Section -->
+<section class="bg-gray-100 py-12">
+    <div class="container mx-auto px-4">
+        <!-- Mission Section -->
+        <div class="text-center mb-8">
+            <h3 class="text-2xl font-bold text-blue-900">Mission</h3>
+            <p class="mt-2 text-gray-700 max-w-2xl mx-auto">
+                To provide reliable, safe, quality, and efficient electric service for a developed and progressive Biliran Province.
+            </p>
+        </div>
+
+        <!-- Core Values Section -->
+        <div class="text-center">
+            <h3 class="text-2xl font-bold text-blue-900">Core Values</h3>
+            <div class="mt-4 flex flex-wrap justify-center gap-4 text-gray-700">
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Godliness</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Discipline</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Honesty</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Excellence</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Accountability</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Respect</span>
+                <span class="bg-white px-4 py-2 rounded-full shadow-sm">Teamwork</span>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Status of Electrification -->
     <section class="py-12">
@@ -99,7 +110,9 @@ include 'components/navbar.php';
         </div>
     </section>
 
-    <!-- Footer -->
-    <?php include 'components/footer.php'; ?>
+    <?php
+    include 'components/links.php';
+    include 'components/footer.php';
+    ?>
 </body>
 </html>
