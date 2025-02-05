@@ -53,15 +53,15 @@ include '../../components/navbar.php';
         <!-- Left Sidebar Section -->
         <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
             <ul class="space-y-4 text-right font-bold">
-                <li><a href="<?php echo BASE_URL; ?>user/history.php" class="text-black hover:text-blue-800 text-sm">Brief History</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/vision.php" class="text-black hover:text-blue-800 text-sm">Vision, Mission, & Values</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/logo.php" class="text-black hover:text-blue-800 text-sm">Our Logo</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/board.php" class="text-black hover:text-blue-800 text-sm">The Board of Directors</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/management.php" class="text-black hover:text-blue-800 text-sm">The Management</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/franchise.php" class="text-black hover:text-blue-800 text-sm">Franchise Area</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/practices.php" class="text-black hover:text-blue-800 text-sm">Best Practices</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/awards.php" class="text-black hover:text-blue-800 text-sm">Awards & Citations</a></li>
-                <li><a href="<?php echo BASE_URL; ?>user/sources.php" class="text-black hover:text-blue-800 text-sm">Power Sources</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/history.php" class="text-black hover:text-blue-800 text-sm">Brief History</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/vision.php" class="text-black hover:text-blue-800 text-sm">Vision, Mission, & Values</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/logo.php" class="text-black hover:text-blue-800 text-sm">Our Logo</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/board.php" class="text-black hover:text-blue-800 text-sm">The Board of Directors</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/management.php" class="text-black hover:text-blue-800 text-sm">The Management</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/franchise.php" class="text-black hover:text-blue-800 text-sm">Franchise Area</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/practices.php" class="text-black hover:text-blue-800 text-sm">Best Practices</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/awards.php" class="text-black hover:text-blue-800 text-sm">Awards & Citations</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/about/power.php" class="text-black hover:text-blue-800 text-sm">Power Sources</a></li>
             </ul>
         </div>
 
