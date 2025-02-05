@@ -142,8 +142,8 @@ include '../../components/navbar.php';
 
     </div>
     <?php
-    include '../components/links.php';
-    include '../components/footer.php';
+    include '../../components/links.php';
+    include '../../components/footer.php';
     ?>
 </body>
 </html>
