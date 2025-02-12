@@ -1,5 +1,5 @@
 <?php
-define('BASE_URL', 'http://localhost/Bileco-Website-PHP/');
+define('BASE_URL', 'http://localhost/crud/');
 
 
 class conn {
