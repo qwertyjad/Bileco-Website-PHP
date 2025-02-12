@@ -24,9 +24,9 @@ include '../../components/navbar.php';
         <div class="order-1 md:order-2 w-full md:w-3/5 bg-white p-6 rounded-md">
             <h2 class="text-3xl font-bold text-[#87CEEB] mb-4">TIPID TIPS</h2>
             <hr class="border-t-4 border-b-4 border-[ffdb19] mt-1 mb-8">
-            <div x-data="{ openTip: null }" class="space-y-3">
+            <ol class="list-decimal pl-5 text-gray-700 space-y-3"></ol>
             
-            <div class="grid grid-cols-1 gap-3 " x-data="{ openTip: null }">
+            <div class="grid grid-cols-1 gap-2 bg-gray-100" x-data="{ openTip: null }">
     <?php 
         $tips = [
             "Appliances" => "Turn off appliances when not in use (i.e. computer, dvd, stereo, tv, etc). It is not enough to leave them on standby mode. We must turn it off at the main switch then unplug it.",
@@ -65,16 +65,20 @@ include '../../components/navbar.php';
         ?>
     
         <?php foreach ($tips as $title => $content): ?>
-            <div class="border-b border-gray-300 rounded-lg shadow-sm bg-gray-100">
-                <div @click="openTip = openTip === <?= $tip_number; ?> ? null : <?= $tip_number; ?>"
-                     class="cursor-pointer p-4 flex items-center justify-between font-semibold">
-                    <span :class="openTip === <?= $tip_number; ?> ? 'text-green-600' : 'text-blue-600'">
-                        <span x-text="openTip === <?= $tip_number; ?> ? '−' : '+'"></span>
-                        <?= $title; ?>
+            <div class="border rounded-lg shadow-sm bg-gray-200">
+                <!-- Clickable Header -->
+                <button @click="openTip === <?= $tip_number; ?> ? openTip = null : openTip = <?= $tip_number; ?>" 
+                        class="w-full text-left px-4 py-3 font-medium flex items-center justify-between bg-gray-200 transition-all duration-300"
+                        :class="openTip === <?= $tip_number; ?> ? 'text-green-600' : 'text-blue-700'">
+                    <span class="flex items-center gap-2">
+                        <span class="text-lg font-bold" 
+                              :class="openTip === <?= $tip_number; ?> ? 'text-green-600' : 'text-blue-600'">
+                            <span x-text="openTip === <?= $tip_number; ?> ? '-' : '+'"></span>
+                        </span>
+                        <span><?= $title ?></span>
                     </span>
-                </div>
-
-        
+                </button>
+    
                 <!-- Smooth Transition Content -->
                 <div x-show="openTip === <?= $tip_number; ?>" 
                      x-transition:enter="transition ease-out duration-500"
@@ -83,12 +87,11 @@ include '../../components/navbar.php';
                      x-transition:leave="transition ease-in duration-400"
                      x-transition:leave-start="opacity-100 transform translate-y-0 scale-100"
                      x-transition:leave-end="opacity-0 transform -translate-y-2 scale-95"
-                     class="p-4 text-gray-700 bg-white border-t border-gray-200">
+                     class="p-4 text-gray-700 bg-gray-100 border-t border-gray-200">
                     <?= $content; ?>
                 </div>
             </div>
         <?php $tip_number++; endforeach; ?>
-    </div>
     </div>
         </div>
 
