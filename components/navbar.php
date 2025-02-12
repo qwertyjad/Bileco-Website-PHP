@@ -58,20 +58,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 
-    
-<!-- Privacy Corner  -->
-<div x-data="{ isHovering: false }" class="relative group" @mouseover="isHovering = true" @mouseleave="isHovering = false">
-      <a href="<?php echo BASE_URL; ?>user/privacy.php" class="relative">
-           <button class="px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-500 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'privacy.php') ? 'text-yellow-500' : ''; ?>">
-             PRIVACY CORNER
-           </button>
-      </a>
-
- <!-- Dropdown Menu -->
-       
-    </div>
-
-
             <a href="<?php echo BASE_URL; ?>user/news.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'news.php') ? 'text-yellow-500' : ''; ?>">NEWS & EVENT</a>
             <a href="<?php echo BASE_URL; ?>user/downloads/download.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'download.php') ? 'text-yellow-500' : ''; ?>">DOWNLOADS</a>
             <a href="<?php echo BASE_URL; ?>user/contact.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'contact.php') ? 'text-yellow-500' : ''; ?>">CONTACT</a>
@@ -90,19 +76,22 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </div>
 </div>
 
-        <!-- Profile Dropdown -->
-<div class="relative">
-    <button @click="isOpen = !isOpen" class="flex items-center space-x-2 p-2 rounded-full  text-white  focus:outline-none transition duration-200">
-        <!-- Profile Icon with hover effect -->
-        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Profile" class="w-8 h-8 rounded-full border-2  hover:border-yellow-500 transition duration-200">
-    </button>
-    
-    <!-- Dropdown Menu -->
-    <div x-show="isOpen" x-transition class="absolute right-0 mt-2 w-40 bg-white text-black rounded-lg z-30">
-        <a href="<?php echo BASE_URL; ?>user/login.php" class="block px-4 py-2 text-sm hover:bg-gray-100 transition duration-200">Login</a>
-        <a href="<?php echo BASE_URL; ?>user/signup.php" class="block px-4 py-2 text-sm hover:bg-gray-100 transition duration-200">Sign Up</a>
-    </div>
+<!-- Profile Section Replaced with Login and Sign Up Buttons -->
+<div class="flex flex-nowrap items-center space-x-4 justify-center">
+
+    <!-- Login Button -->
+    <a href="<?php echo BASE_URL; ?>auth/login.php" class="w-full sm:w-auto px-4 py-1 bg-yellow-500 text-white rounded-md font-medium hover:bg-yellow-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-center mb-2 sm:mb-0 md:text-sm">
+        Login
+    </a>
+
+    <!-- Sign Up Button -->
+    <a href="<?php echo BASE_URL; ?>auth/registerform.php" class="w-full sm:w-auto px-4 py-1 bg-transparent border border-yellow-500 text-yellow-500 rounded-md font-medium hover:bg-yellow-500 hover:text-white transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-center sm:ml-4">
+        Sign Up
+    </a>
 </div>
+
+
+
 
     </div>
 </nav>

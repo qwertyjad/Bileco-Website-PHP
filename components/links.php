@@ -57,61 +57,86 @@
                     <!-- About Us Section -->
                     <div class="space-y-7">
                         <h3 class="text-[#87CEEB] text-xl uppercase font-bold">About Us</h3>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Brief History</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Vision, Mission & Core Values</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">The Board of Directors</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">The Management</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Best Practices</a>
+                        <a href="<?php echo BASE_URL; ?>user/about/history.php" class="block mt-2 text-sm text-gray-400 hover:underline">Brief History</a>
+                        <a href="<?php echo BASE_URL; ?>user/about/vision.php" class="block mt-2 text-sm text-gray-400 hover:underline">Vision, Mission & Core Values</a>
+                        <a href="<?php echo BASE_URL; ?>user/about/board.php" class="block mt-2 text-sm text-gray-400 hover:underline">The Board of Directors</a>
+                        <a href="<?php echo BASE_URL; ?>user/about/management.php" class="block mt-2 text-sm text-gray-400 hover:underline">The Management</a>
+                        <a href="<?php echo BASE_URL; ?>user/about/practices.php" class="block mt-2 text-sm text-gray-400 hover:underline">Best Practices</a>
                     </div>
 
                     <!-- Consumer Services Section -->
                     <div class="space-y-7">
                         <h3 class="text-[#87CEEB] text-xl uppercase font-bold">Consumer Services</h3>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Apply for New Connection</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Billing Information</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Senior Citizen Discount</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Maintenance Schedule</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Power Rates</a>
+                        <a href="<?php echo BASE_URL; ?>user/consumer/apply.php" class="block mt-2 text-sm text-gray-400 hover:underline">Apply for New Connection</a>
+                        <a href="<?php echo BASE_URL; ?>user/consumer/billing.php" class="block mt-2 text-sm text-gray-400 hover:underline">Billing Information</a>
+                        <a href="<?php echo BASE_URL; ?>user/consumer/senior.php" class="block mt-2 text-sm text-gray-400 hover:underline">Senior Citizen Discount</a>
+                        <a href="<?php echo BASE_URL; ?>user/consumer/maintenance.php" class="block mt-2 text-sm text-gray-400 hover:underline">Maintenance Schedule</a>
+                        <a href="<?php echo BASE_URL; ?>user/consumer/power.php" class="block mt-2 text-sm text-gray-400 hover:underline">Power Rates</a>
                     </div>
 
                     <!-- Other Links Section -->
-                    <div class="space-y-7">
+                    <div class="space-y-7 pl-8">
                         <h3 class="text-[#87CEEB] text-xl uppercase font-bold">Other Links</h3>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Bids and Awards</a>
+                        <a href="<?php echo BASE_URL; ?>user/bids.php" class="block mt-2 text-sm text-gray-400 hover:underline">Bids and Awards</a>
                         <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Disclosures</a>
                         <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Careers</a>
                         <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Downloads</a>
-                        <a href="#" class="block mt-2 text-sm text-gray-400 hover:underline">Contact Us</a>
+                        <a href="<?php echo BASE_URL; ?>user/contact.php" class="block mt-2 text-sm text-gray-400 hover:underline">Contact Us</a>
                     </div>
 
                     <!-- Our Partners Section -->
                     <div>
                         <h3 class="text-[#87CEEB] text-xl uppercase font-bold">Our Partners</h3>
-                        <div class="grid grid-cols-2 gap-4 mt-5">
+                        <div class="grid grid-cols-3 gap-4 mt-5">
+                           
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_1.jpg" class="w-auto h-10">
-                            </div>
+                            <a href="https://doe.gov.ph/">    
+                            <img href="#" src="https://www.bileco.net/wp-content/uploads/2017/11/doe.png" class="w-auto h-10">
+                            </a>
+                        </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_2.jpg" class="w-auto h-10">
-                            </div>
+                                <a href="https://www.nea.gov.ph/ao39/">
+                         <img src="https://www.bileco.net/wp-content/uploads/2017/11/nea.png" alt="Clickable Image" class="w-auto h-10">
+                            </a>
+                             </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_3.jpg" class="w-auto h-10">
+                                  <a href="https://www.erc.gov.ph/">
+                                <img src="https://www.bileco.net/wp-content/uploads/2017/11/erc.png" class="w-auto h-10">
+                                </a>
                             </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_4.jpg" class="w-auto h-10">
-                            </div>
+                                 <a href="https://www.ngcp.ph/">   
+                            <img src="https://www.bileco.net/wp-content/uploads/2017/11/ngcp.png" class="w-auto h-10">
+                            </a>
+                        </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_5.jpg" class="w-auto h-10">
+                            <a href="https://www.napocor.gov.ph/"> 
+                                <img src="https://www.bileco.net/wp-content/uploads/2017/11/napocor.png" class="w-auto h-10">
+                                </a>
                             </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_6.jpg" class="w-auto h-10">
-                            </div>
+                            <a href="https://www.psalm.gov.ph/">    
+                            <img src="https://www.bileco.net/wp-content/uploads/2017/11/psalm.png" class="w-auto h-10">
+                            </a>   
+                        </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_7.jpg" class="w-auto h-10">
-                            </div>
+                            <a href="https://www.transco.ph/">     
+                            <img src="https://www.bileco.net/wp-content/uploads/2017/11/transco.png" class="w-auto h-10">
+                            </a>  
+                        </div>
+
                             <div class="flex justify-start">
-                                <img src="path_to_partner_image_8.jpg" class="w-auto h-10">
-                            </div>
+                            <a href="https://www.wesm.ph/">     
+                            <img src="https://www.bileco.net/wp-content/uploads/2017/11/wesm.png" class="w-auto h-10">
+                            </a>    
+                        </div>
+                        
                         </div>
                     </div>
                 </div>

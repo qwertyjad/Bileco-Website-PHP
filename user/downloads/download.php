@@ -34,7 +34,7 @@ include '../../components/navbar.php';
 
         <!-- Left Sidebar Section -->
         <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
-            <ul class="space-y-4 md:text-right font-bold">
+            <ul class="space-y-4 md:text-right font-semibold">
                 <li><a href="<?php echo BASE_URL; ?>user/downloads/download.php" class="text-black hover:text-blue-800 text-sm">Newsletter</a></li>
                 <li><a href="<?php echo BASE_URL; ?>user/downloads/annual.php" class="text-black hover:text-blue-800 text-sm">Annual Reports</a></li>
                 <li><a href="<?php echo BASE_URL; ?>user/downloads/membership.php" class="text-black hover:text-blue-800 text-sm">Membership Master List</a></li>

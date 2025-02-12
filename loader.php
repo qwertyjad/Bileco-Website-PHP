@@ -11,7 +11,7 @@ if (isset($_SESSION['loaded'])) {
 $_SESSION['loaded'] = true;
 
 // Redirect to index.php after 3 seconds
-header("Refresh: 3; url=index.php");
+header("Refresh: 4; url=index.php");
 
 // Prevent caching
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
@@ -30,12 +30,12 @@ $bgImage = !empty($files) ? $files[array_rand($files)] : 'assets/images/logo.jpg
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
 </head>
-<body class="flex items-center justify-center h-screen bg-cover bg-center" style="background-image: url('<?php echo $bgImage; ?>');">
+<body class="flex items-center justify-center h-screen bg-cover bg-center bg-[#002D62]">
 
-    <div class="w-96 h-60 flex flex-col items-center justify-center bg-white bg-opacity-10 backdrop-blur-lg rounded-2xl  p-6 text-center animate-fade-in">
-        <img src="assets/images/logos/logo.png" alt="Logo" class="w-50 animate-pulse"> <!-- Replace with your actual logo -->
-        <p class="mt-4 text-lg text-black font-semibold animate-blink">Please wait, loading the site...</p>
-        <p class="mt-2 text-black text-sm font-medium italic">We serve because we care</p> <!-- Added caption -->
+    <div class="w-96 h-60 flex flex-col items-center justify-center  bg-opacity-10 backdrop-blur-lg p-6 text-center animate-fade-in">
+        <img src="assets/images/logos/logo.png" alt="Logo" class="animate-pulse"> <!-- Replace with your actual logo -->
+        <p class="mt-4 text-lg text-white font-semibold animate-blink">Please wait, loading the site ...</p>
+        <p class="text-3xl mt-2 text-[#ffbf00] whitespace-nowrap font-medium italic pt-8">We Serve Because We Care</p> <!-- Added caption -->
     </div>
 
     <!-- Animations -->

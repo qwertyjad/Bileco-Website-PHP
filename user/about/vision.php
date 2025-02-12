@@ -29,7 +29,7 @@ include '../../components/navbar.php';
             
 <p class="text-2xl font-bold text-sky-600 mb-4"><strong>Vision</strong></p> 
 <ol class="list-decimal pl-6 space-y-4 text-blue-700 "></ol> 
-<p class="text-gray-700 text-justify py-3 s"> An electric distribution utility recognized as a hallmark of excellence by providing premium customer satisfaction by 2030."</p>  
+<p class="text-gray-700 text-justify py-3 s pt-2"> An electric distribution utility recognized as a hallmark of excellence by providing premium customer satisfaction by 2030."</p>  
 
 <p class="text-2xl font-bold text-sky-600 col-span-1"><strong>Mission</strong></p>  
  <ol class="text-gray-700 text-justify col-span-3 ">

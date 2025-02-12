@@ -14,7 +14,7 @@ include '../../components/navbar.php';
 </head>
  <?php
         echo '<div class="header-image w-full h-[250px] overflow-hidden">';
-        echo '<img src="' . 'https://static.vecteezy.com/system/resources/previews/037/145/251/non_2x/soft-focus-of-light-bulb-in-market-shop-with-walking-street-free-photo.jpg' . '" alt="Bridge" class="w-full h-full object-cover" />';
+        echo '<img src="' . 'https://senderoconsulting.com/wp-content/uploads/2024/03/AdobeStock_327676918-scaled.jpeg' . '" alt="Bridge" class="w-full h-full object-cover" />';
         echo '</div>';
     ?>
 <body class="bg-white">
@@ -88,7 +88,7 @@ include '../../components/navbar.php';
 
          <!-- Left Sidebar Section -->
          <div class="order-2 md:order-1 w-full md:w-1/5 bg-white border-r p-6 rounded-md md:pt-20">
-            <ul class="space-y-4 text-right font-bold">
+            <ul class="space-y-4 md:text-right font-semibold">
                 <li><a href="<?php echo BASE_URL; ?>user/consumer/apply.php" class="text-black hover:text-blue-800 text-sm">Apply for New Connection</a></li>
                 <li><a href="<?php echo BASE_URL; ?>user/consumer/rights.php" class="text-blue-800 hover:text-blue-800 text-sm">Rights and Obligations</a></li>
                 <li><a href="<?php echo BASE_URL; ?>user/consumer/billing.php" class="text-black hover:text-blue-800 text-sm">Billing Information</a></li>
