@@ -9,8 +9,6 @@ include 'components/navbar.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BILECO</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <style>
         
@@ -43,7 +41,7 @@ include 'components/navbar.php';
 
 
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-white font-sans">
     
 <!-- Swiper Background Section -->
 <section class="relative w-full h-[50vh] md:h-[70vh] lg:h-96 border-b-2 border-white">

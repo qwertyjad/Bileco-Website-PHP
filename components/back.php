@@ -8,7 +8,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <div class="container px-6 py-3 mx-auto flex justify-between items-center">
         <!-- Logo -->
         <a href="<?php echo BASE_URL; ?>">
-            <img src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Logo" class="w-auto h-12 max-w-full sm-h-auto">
+            <img src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Logo" class="w-auto h-12">
         </a>
 
 <!-- Desktop Menu -->
@@ -24,36 +24,29 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 </a>
 
 <!-- About Us Dropdown -->
-<div x-data="{ isOpen: false }" x-init="isOpen = <?php echo ($currentPage == 'about.php') ? 'true' : 'false'; ?>" class="relative group">
-    <button @click="isOpen = !isOpen"
-            :class="{'text-yellow-500': <?php echo ($currentPage == 'about.php') ? 'true' : 'false'; ?>}"
-            class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500
-            after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-500 after:origin-left hover:after:scale-x-100">
-        ABOUT US
+<div x-data="{ isHovering: false }" class="relative group" @mouseover="isHovering = true" @mouseleave="isHovering = false">
+<a href="<?php echo BASE_URL; ?>user/about/about.php" class="relative">    
+<button class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-500 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'about.php') ? 'text-yellow-500' : ''; ?>">    ABOUT US
     </button>
-    <!-- Flyout Menu -->
-    <div x-show="isOpen" x-transition:leave="transition-opacity duration-200" class="absolute left-0 mt-2 bg-white text-gray-700 rounded-lg shadow-lg w-96 p-4 hidden group-hover:block">
-        <div class="grid grid-cols">
-            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Services</a>
-            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Careers</a>
-            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Blog</a>
-            <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Team</a>
-        </div>
+    <!-- Dropdown Menu -->
+    <div x-show="isHovering" x-transition:leave="transition-opacity duration-400" class="absolute left-0 mt-2 bg-white text-gray-700 rounded-lg shadow-lg w-48">
+        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Services</a>
+        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Careers</a>
+        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">Blog</a>
     </div>
 </div>
 
 <!-- Consumer Corner Dropdown -->
-<div x-data="{ isOpen: false }" x-init="isOpen = <?php echo ($currentPage == 'consumer.php') ? 'true' : 'false'; ?>" class="relative group">
-    <button @click="isOpen = !isOpen"
-            :class="{'text-yellow-500': <?php echo ($currentPage == 'consumer.php') ? 'true' : 'false'; ?>}"
-            class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500
-            after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-500 after:origin-left hover:after:scale-x-100">
-        CONSUMER CORNER
-    </button>
-    <!-- Flyout Menu -->
-    <div x-show="isOpen" x-transition:leave="transition-opacity duration-200" class="absolute left-0 mt-2 bg-white text-gray-700 rounded-lg shadow-lg w-96 p-4 hidden group-hover:block">
-        <div class="grid grid-cols">
-            <a href="<?php echo BASE_URL; ?>user/consumer/apply.php" class="block px-4 py-2 text-sm hover:bg-gray-200 <?php echo ($currentPage == 'apply.php') ? 'text-yellow-500' : ''; ?>">Apply for New Connection</a>
+<div x-data="{ isHovering: false }" class="relative group" @mouseover="isHovering = true" @mouseleave="isHovering = false">
+      <a href="<?php echo BASE_URL; ?>user/consumer/apply.php" class="relative">
+           <button class="px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-500 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'apply.php') ? 'text-yellow-500' : ''; ?>">
+             CONSUMER CORNER
+           </button>
+      </a>
+
+ <!-- Dropdown Menu -->
+        <div x-show="isHovering" x-transition:leave="transition-opacity duration-400" class="absolute left-0 mt-2 bg-white text-gray-700 rounded-lg shadow-lg w-48">
+            <a href="<?php echo BASE_URL; ?>user/consumer/apply.php" class="block px-4 py-2 text-sm hover:bg-gray-200 <?php echo ($currentPage == 'apply.php') ? 'text-yellow-500' : ''; ?>">Apply for New Conection</a>
             <a href="<?php echo BASE_URL; ?>user/consumer/rights.php" class="block px-4 py-2 text-sm hover:bg-gray-200 <?php echo ($currentPage == 'rights.php') ? 'text-yellow-500' : ''; ?>">Rights & Obligations</a>
             <a href="<?php echo BASE_URL; ?>user/consumer/billing.php" class="block px-4 py-2 text-sm hover:bg-gray-200 <?php echo ($currentPage == 'billing.php') ? 'text-yellow-500' : ''; ?>">Billing Information</a>
             <a href="<?php echo BASE_URL; ?>user/consumer/qualification.php" class="block px-4 py-2 text-sm hover:bg-gray-200 <?php echo ($currentPage == 'qualification.php') ? 'text-yellow-500' : ''; ?>">Qualifications of EC Board</a>
@@ -65,9 +58,6 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <a href="<?php echo BASE_URL; ?>user/consumer/tipid.php" class="block px-4 py-2 text-sm hover:bg-gray-200 <?php echo ($currentPage == 'tipid.php') ? 'text-yellow-500' : ''; ?>">Tipid Tips</a>
         </div>
     </div>
-</div>
-
-
 
             <a href="<?php echo BASE_URL; ?>user/news.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'news.php') ? 'text-yellow-500' : ''; ?>">NEWS & EVENT</a>
             <a href="<?php echo BASE_URL; ?>user/downloads/download.php" class="relative px-3 py-2 transition-colors duration-300 hover:text-yellow-500 after:block after:content-[''] after:h-[2px] after:w-full after:bg-yellow-500 after:scale-x-0 after:transition-transform after:duration-300 after:origin-left hover:after:scale-x-100 <?php echo ($currentPage == 'download.php') ? 'text-yellow-500' : ''; ?>">DOWNLOADS</a>
@@ -91,16 +81,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 <div class="flex flex-nowrap items-center space-x-4 justify-center">
 
     <!-- Login Button -->
-    <a href="<?php echo BASE_URL; ?>auth/login.php" class="w-full sm:w-auto px-5 py-2 bg-yellow-500 text-white rounded-md font-medium hover:bg-yellow-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-center mb-2 sm:mb-0 md:text-sm">
-        LOGIN
+    <a href="<?php echo BASE_URL; ?>auth/login.php" class="w-full sm:w-auto px-4 py-1 bg-yellow-500 text-white rounded-md font-medium hover:bg-yellow-600 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-center mb-2 sm:mb-0 md:text-sm">
+        Login
     </a>
 
     <!-- Sign Up Button -->
-    <a href="<?php echo BASE_URL; ?>auth/registerform.php" class="w-full sm:w-auto px-3 py-1.5 bg-transparent border border-yellow-500 text-yellow-500 rounded-md font-medium hover:bg-yellow-500 hover:text-white transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-center sm:ml-4">
-        SIGNUP
+    <a href="<?php echo BASE_URL; ?>auth/registerform.php" class="w-full sm:w-auto px-4 py-1 bg-transparent border border-yellow-500 text-yellow-500 rounded-md font-medium hover:bg-yellow-500 hover:text-white transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 text-center sm:ml-4">
+        Sign Up
     </a>
 </div>
-
 
 
 

@@ -11,19 +11,30 @@ $db = new conn();
 if (isset($_POST['submit'])) {
     $email = $_POST['email'];
 
-    // Check if the email exists in the database
+    // Check if email exists in the database
     $sql = "SELECT * FROM tbl_users WHERE email = :email";
     $stmt = $db->conn->prepare($sql);
     $stmt->execute([':email' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        // Generate a random OTP
         $otp = rand(100000, 999999);
-
-        // Insert OTP into the tbl_otp table with an expiration time of 15 minutes
         $expiration_time = date('Y-m-d H:i:s', strtotime('+15 minutes'));
-        $sql = "INSERT INTO tbl_otp (email, otp, expiration_time) VALUES (:email, :otp, :expiration_time)";
+
+        // Check if OTP already exists
+        $sql = "SELECT * FROM tbl_otp WHERE email = :email";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->execute([':email' => $email]);
+        $existing_otp = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($existing_otp) {
+            // Update existing OTP
+            $sql = "UPDATE tbl_otp SET otp = :otp, expiration_time = :expiration_time WHERE email = :email";
+        } else {
+            // Insert new OTP if none exists
+            $sql = "INSERT INTO tbl_otp (email, otp, expiration_time) VALUES (:email, :otp, :expiration_time)";
+        }
+
         $stmt = $db->conn->prepare($sql);
         $stmt->execute([
             ':email' => $email,
@@ -31,37 +42,37 @@ if (isset($_POST['submit'])) {
             ':expiration_time' => $expiration_time
         ]);
 
-        // Send OTP to the user's email using PHPMailer
+        // Send OTP via email
         try {
             $mail = new PHPMailer(true);
-            $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com';                        // Specify main SMTP server
-            $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'hadizy.io@gmail.com';  // Replace with correct email
-            $mail->Password = 'czdq kiqz ctsq lkiw';           // SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;   // Enable TLS encryption
-            $mail->Port = 587;                                    // TCP port to connect to
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = '1973.bileco@gmail.com';  // Replace with your email
+            $mail->Password = 'xbgo qbep afwr fvel';  // Replace with app password (never hardcode passwords)
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
 
-            // Recipients
-            $mail->setFrom('your-email@gmail.com', 'Your Name or Company');
-            $mail->addAddress($email);                            // Add recipient's email
+            // Email details
+            $mail->setFrom('1973.bileco@gmail.com', 'Bileco Support');
+            $mail->addAddress($email);
 
-            // Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = 'Password Reset OTP';
-            $mail->Body    = "Hello, <br><br>Your OTP for password reset is: <b>$otp</b><br><br>Please use this OTP to reset your password. It will expire in 15 minutes.";
+            $mail->isHTML(true);
+            $mail->Subject = 'Your OTP Code';
+            $mail->Body    = "Your OTP is: <b>$otp</b>. It expires in 15 minutes.";
 
-            // Send email
             $mail->send();
+
+            $_SESSION['success_message'] = "OTP has been sent to your email: $email";
         } catch (Exception $e) {
-            $error_message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $_SESSION['error_message'] = "Mailer Error: {$mail->ErrorInfo}";
         }
 
-        // Redirect to OTP verification page
+        sleep(5); // Delay for 2 seconds
         header("Location: verify-otp.php?email=" . urlencode($email));
-        exit();
+    exit();
     } else {
-        $error_message = "Email not found in our records.";
+        $_SESSION['error_message'] = "Email not found.";
     }
 }
 ?>
@@ -73,13 +84,48 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script>
+        <?php if (!empty($_SESSION['success_message'])): ?>
+            // Show toast for successful OTP sent
+            window.onload = function() {
+                Toastify({
+                    text: "<?php echo $_SESSION['success_message']; ?>",
+                    duration: 5000, // Toast duration
+                    close: true,
+                    gravity: "top", // Position at the top
+                    position: "right", // Right side
+                    backgroundColor: "#4caf50", // Success color
+                }).showToast();
+                // Clear success message after showing
+                <?php unset($_SESSION['success_message']); ?>
+            }
+        <?php endif; ?>
+
+        <?php if (!empty($_SESSION['error_message'])): ?>
+            // Show toast for error message
+            window.onload = function() {
+                Toastify({
+                    text: "<?php echo $_SESSION['error_message']; ?>",
+                    duration: 5000, // Toast duration
+                    close: true,
+                    gravity: "top", // Position at the top
+                    position: "right", // Right side
+                    backgroundColor: "#f44336", // Error color
+                }).showToast();
+                // Clear error message after showing
+                <?php unset($_SESSION['error_message']); ?>
+            }
+        <?php endif; ?>
+    </script>
 </head>
 <body class="flex items-center justify-center h-screen bg-gray-100">
     <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Forgot Password</h2>
 
-        <?php if (!empty($error_message)) : ?>
-            <p class="text-red-500 text-center mb-4"><?php echo $error_message; ?></p>
+        <?php if (!empty($_SESSION['error_message'])) : ?>
+            <p class="text-red-500 text-center mb-4"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></p>
         <?php endif; ?>
 
         <form method="POST" class="space-y-4">
