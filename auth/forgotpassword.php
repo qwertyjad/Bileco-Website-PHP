@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = '1973.bileco@gmail.com';  // Replace with your email
-            $mail->Password = 'xbgo qbep afwr fvel';  // Replace with app password (never hardcode passwords)
+            $mail->Password = 'xbgo qbep afwr fvel'; // Use environment variable
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
@@ -64,13 +64,11 @@ if (isset($_POST['submit'])) {
             $mail->send();
 
             $_SESSION['success_message'] = "OTP has been sent to your email: $email";
+            $_SESSION['redirect_email'] = $email; // Store email for redirection
+
         } catch (Exception $e) {
             $_SESSION['error_message'] = "Mailer Error: {$mail->ErrorInfo}";
         }
-
-        sleep(5); // Delay for 2 seconds
-        header("Location: verify-otp.php?email=" . urlencode($email));
-    exit();
     } else {
         $_SESSION['error_message'] = "Email not found.";
     }
@@ -83,50 +81,54 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <script>
-        <?php if (!empty($_SESSION['success_message'])): ?>
-            // Show toast for successful OTP sent
-            window.onload = function() {
+        window.onload = function() {
+            <?php if (!empty($_SESSION['success_message'])): ?>
+                // Show success message first
                 Toastify({
                     text: "<?php echo $_SESSION['success_message']; ?>",
-                    duration: 5000, // Toast duration
+                    duration: 4000, // Display toast for 4 seconds
                     close: true,
-                    gravity: "top", // Position at the top
-                    position: "right", // Right side
-                    backgroundColor: "#4caf50", // Success color
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4caf50",
                 }).showToast();
-                // Clear success message after showing
-                <?php unset($_SESSION['success_message']); ?>
-            }
-        <?php endif; ?>
+                
+                <?php 
+                $email = $_SESSION['redirect_email']; 
+                unset($_SESSION['success_message']); 
+                unset($_SESSION['redirect_email']); 
+                ?>
 
-        <?php if (!empty($_SESSION['error_message'])): ?>
-            // Show toast for error message
-            window.onload = function() {
+                // Redirect **AFTER** the toast shows
+                setTimeout(function() {
+                    window.location.href = "verify-otp.php?email=<?php echo urlencode($email); ?>";
+                }, 4500); // Redirect after 4.5 seconds
+
+            <?php elseif (!empty($_SESSION['error_message'])): ?>
+                // Show error message
                 Toastify({
                     text: "<?php echo $_SESSION['error_message']; ?>",
-                    duration: 5000, // Toast duration
+                    duration: 5000, // Show error for 5 seconds
                     close: true,
-                    gravity: "top", // Position at the top
-                    position: "right", // Right side
-                    backgroundColor: "#f44336", // Error color
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#f44336",
                 }).showToast();
-                // Clear error message after showing
                 <?php unset($_SESSION['error_message']); ?>
-            }
-        <?php endif; ?>
+            <?php endif; ?>
+        }
     </script>
 </head>
 <body class="flex items-center justify-center h-screen bg-gray-100">
     <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Forgot Password</h2>
-
-        <?php if (!empty($_SESSION['error_message'])) : ?>
-            <p class="text-red-500 text-center mb-4"><?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?></p>
-        <?php endif; ?>
 
         <form method="POST" class="space-y-4">
             <div>

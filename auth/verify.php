@@ -17,14 +17,14 @@ if (!$db) {
 $email = $_SESSION['email'];
 
 // Fetch OTP expiration time from the database
-$sql = "SELECT expires_at FROM tbl_otp WHERE email = :email";
+$sql = "SELECT expiration_time FROM tbl_otp WHERE email = :email";
 $stmt = $db->conn->prepare($sql);
 $stmt->execute([':email' => $email]);
 $otpData = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $remaining_time = 0;
 if ($otpData) {
-    $expiry_time = strtotime($otpData['expires_at']);
+    $expiry_time = strtotime($otpData['expiration_time']);
     $remaining_time = max($expiry_time - time(), 0);
 }
 

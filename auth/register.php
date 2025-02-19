@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         // Hash password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $role = 'user';
+        $status = 'offline'; // Default status if not logged in
+        $created_at = date('Y-m-d H:i:s');
 
         // Check if email already exists
         $emailCheckSql = "SELECT email FROM tbl_users WHERE email = :email";
@@ -48,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         }
 
         // Insert user into database
-        $sql = "INSERT INTO tbl_users (accountnum, firstname, middlename, lastname, suffix, address, email, contactnumber, password, role, verified) 
-                VALUES (:accountnum, :firstname, :middlename, :lastname, :suffix, :address, :email, :contactnumber, :password, :role, 0)";
+        $sql = "INSERT INTO tbl_users (accountnum, firstname, middlename, lastname, suffix, address, email, contactnumber, password, role, verified, created_at, status) 
+                VALUES (:accountnum, :firstname, :middlename, :lastname, :suffix, :address, :email, :contactnumber, :password, :role, 0, :created_at, :status)";
         $stmt = $db->conn->prepare($sql);
         $stmt->execute([
             ':accountnum' => $accountnum,
@@ -61,7 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
             ':email' => $email,
             ':contactnumber' => $contactnumber,
             ':password' => $hashed_password,
-            ':role' => $role
+            ':role' => $role,
+            ':created_at' => $created_at,
+            ':status' => $status
         ]);
 
         // Generate OTP
@@ -69,12 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
         $expiry_time = time() + 300; // OTP expires in 5 minutes
 
         // Insert OTP record
-        $insertOtpSql = "INSERT INTO tbl_otp (email, otp, expires_at) VALUES (:email, :otp, :expires_at)";
+        $insertOtpSql = "INSERT INTO tbl_otp (email, otp, expiration_time, created_at) VALUES (:email, :otp, :expiration_time, :created_at)";
         $insertOtpStmt = $db->conn->prepare($insertOtpSql);
         $insertOtpStmt->execute([
             ':email' => $email,
             ':otp' => $otp,
-            ':expires_at' => date('Y-m-d H:i:s', $expiry_time)
+            ':expiration_time' => date('Y-m-d H:i:s', $expiry_time),
+            ':created_at' => date('Y-m-d H:i:s')
         ]);
 
         // Send OTP email

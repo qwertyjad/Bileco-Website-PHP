@@ -25,9 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $db->conn->prepare($sql);
             $stmt->execute([':email' => $email]);
 
-            $_SESSION['success_message'] = "OTP Verified Successfully! Redirecting to reset password page.";
-            header("Location: reset_password.php");
-            exit();
+            $_SESSION['success_message'] = "OTP Verified Successfully! Redirecting to reset password page...";
+            $_SESSION['redirect'] = true; // Flag to handle redirection after delay
         } else {
             $_SESSION['error_message'] = "Invalid or expired OTP. Please try again.";
         }
@@ -55,9 +54,14 @@ if (isset($_GET['email'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify OTP</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Toastify for notifications -->
     <script src="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <script>
         function startCountdown(expiration) {
             let interval = setInterval(function () {
@@ -79,30 +83,31 @@ if (isset($_GET['email'])) {
 
         window.onload = function() {
             <?php if (!empty($_SESSION['success_message'])): ?>
-                // Show toast for successful OTP verification
                 Toastify({
                     text: "<?php echo $_SESSION['success_message']; ?>",
                     duration: 3000, // Toast duration
                     close: true,
-                    gravity: "top", // Position at the top
-                    position: "right", // Right side
-                    backgroundColor: "#4caf50", // Success color
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4caf50",
                 }).showToast();
-                // Clear success message after showing
+                
                 <?php unset($_SESSION['success_message']); ?>
-            <?php endif; ?>
 
-            <?php if (!empty($_SESSION['error_message'])): ?>
-                // Show toast for error message
+                // Delay before redirecting (3 seconds after toast)
+                setTimeout(function() {
+                    window.location.href = "reset_password.php";
+                }, 3500);
+            <?php elseif (!empty($_SESSION['error_message'])): ?>
                 Toastify({
                     text: "<?php echo $_SESSION['error_message']; ?>",
                     duration: 3000, // Toast duration
                     close: true,
-                    gravity: "top", // Position at the top
-                    position: "right", // Right side
-                    backgroundColor: "#f44336", // Error color
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#f44336",
                 }).showToast();
-                // Clear error message after showing
+
                 <?php unset($_SESSION['error_message']); ?>
             <?php endif; ?>
         }

@@ -52,11 +52,11 @@ $newOtp = generateOtp();
 $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
 // Update OTP in database
-$sql = "UPDATE tbl_otp SET otp = :otp, expires_at = :expires_at WHERE email = :email";
+$sql = "UPDATE tbl_otp SET otp = :otp, expiration_time = :expiration_time WHERE email = :email";
 $stmt = $db->conn->prepare($sql);
 $updated = $stmt->execute([
     ':otp' => $newOtp,
-    ':expires_at' => $expiresAt,
+    ':expiration_time' => $expiresAt,
     ':email' => $email
 ]);
 

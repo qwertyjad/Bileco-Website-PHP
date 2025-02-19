@@ -110,8 +110,8 @@ if (isset($_GET['logout'])) {
     <?php endif; ?>
 
     <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
-
+    <img src="<?php echo BASE_URL; ?>assets/images/logos/logo.png" alt="Logo" class="w-40 h-40 max-w-full sm-h-auto mx-auto mb-5">
+        
         <form method="POST" class="space-y-4">
             <div>
                 <input type="email" name="email" placeholder="Email" required

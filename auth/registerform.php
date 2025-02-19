@@ -66,7 +66,7 @@ session_start();
     <section class="w-full max-w-3xl p-8 bg-white rounded-lg shadow-md">
         <h2 class="text-4xl font-bold text-center text-gray-700">REGISTER ACCOUNT</h2>
 
-        <form action="registering.php" method="POST" class="mt-6">
+        <form action="register.php" method="POST" class="mt-6">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 
                 <div>
