@@ -3,7 +3,7 @@
         <div class="lg:flex">
             <!-- Left Side (Logo and Contact Info) -->
             <div class="w-full lg:w-1/4 -mx-3 justify-center items-center">
-                <div class="px-6">
+                <div class="px-3">
                 <div class="flex justify-center items-center">
                 <a href="<?php echo BASE_URL; ?>">
                     <img src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Logo" class="w-auto h-30 mb-5">

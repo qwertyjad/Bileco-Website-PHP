@@ -42,9 +42,9 @@ if (isset($_POST['login'])) {
 
                     // Set redirect URL based on user role
                     if ($user['role'] === 'admin') {
-                        $redirect_url = '../src/admin/index.php';
+                        $redirect_url = '../admin/index.php';
                     } elseif ($user['role'] === 'user') {
-                        $redirect_url = '../src/user/index.php';
+                        $redirect_url = '../index.php';
                     } else {
                         session_destroy();
                         die("Unauthorized access.");

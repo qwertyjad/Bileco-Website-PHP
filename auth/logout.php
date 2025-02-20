@@ -2,7 +2,7 @@
 session_start();
 
 // Include the database connection file
-include '../../conn.php';  // Ensure this path is correct to include the conn.php file
+include '../conn.php';  // Ensure this path is correct to include the conn.php file
 
 // Create a new database connection instance
 $db = new conn();  // Instantiate the connection class
@@ -20,6 +20,6 @@ if (isset($_SESSION['user_id'])) {
 }
 
 // Redirect to the login page
-header('Location: ../../index.php');  // Adjust the path as needed
+header('Location: ../index.php');  // Adjust the path as needed
 exit();
 ?>

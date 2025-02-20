@@ -12,7 +12,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </a>
 
 <!-- Desktop Menu -->
-<div class="hidden lg:flex items-center justify-center space-x-6 font-bold text-xs">
+<div class="hidden lg:flex items-center justify-center space-x-6 font-bold text-[10pxs]">
 <a href="<?php echo BASE_URL; ?>index.php" 
    class="relative px-3 py-2 transition-colors duration-300 
           hover:text-yellow-500 

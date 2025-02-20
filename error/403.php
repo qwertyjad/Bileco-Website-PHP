@@ -1,7 +1,8 @@
 <?php
-// Set HTTP response code to 403 (Forbidden)
 http_response_code(403);
-include '../web.php';
+include '../conn.php';
+include '../web.php'; // Include database connection
+include '../components/header.php'; // Include header
 ?>
 
     <meta charset="UTF-8">

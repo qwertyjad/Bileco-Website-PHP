@@ -1,8 +1,48 @@
 <?php
-include 'conn.php';
+session_start();
+include 'conn.php'; // Include the database connection class
 include 'components/header.php';
-include 'components/navbar.php';
+
+// Instantiate the database connection class
+$database = new conn();
+$conn = $database->conn; // Get the PDO connection
+
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    // Fetch user status and role from the database using PDO
+    $query = "SELECT status, role FROM tbl_users WHERE id = :user_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch associative array
+
+    if ($user) {
+        $user_status = $user['status'];
+        $user_role = $user['role'];
+
+        // Redirect admin users to the admin dashboard
+        if ($user_role === 'admin') {
+            header("Location: admin/index.php");
+            exit(); // Ensure the script stops execution after redirection
+        }
+    } else {
+        $user_status = 'offline'; // Default status for guests
+    }
+} else {
+    $user_status = 'offline'; // Default status for guests
+}
+
+// Display the appropriate navbar
+if ($user_status === 'online') {
+    include 'components/navbar-u.php';
+} else {
+    include 'components/navbar.php';
+}
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

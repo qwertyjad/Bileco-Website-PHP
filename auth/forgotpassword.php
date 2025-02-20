@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
         }
     </script>
 </head>
-<body class="flex items-center justify-center h-screen bg-gray-100">
+<body class="flex items-center justify-center h-screen bg-gray-100 bg-gradient-to-br from-yellow-400 via-blue-300 to-blue-800">
     <div class="w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
         <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Forgot Password</h2>
 

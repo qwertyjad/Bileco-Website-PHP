@@ -61,7 +61,7 @@ session_start();
         };
     </script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen bg-gradient-to-br from-yellow-400 via-blue-300 to-blue-800">
 
     <section class="w-full max-w-3xl p-8 bg-white rounded-lg shadow-md">
         <h2 class="text-4xl font-bold text-center text-gray-700">REGISTER ACCOUNT</h2>
