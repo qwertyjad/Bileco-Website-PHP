@@ -1,61 +1,81 @@
 <?php
-  include 'header.php';
-  $user_id = $_GET['user_id'];
-  $user = $function->GetUserInfo($user_id);
+session_start();
+include '../conn.php';
+
+$database = new conn();
+$conn = $database->conn;
+
+// Check if ID is provided
+if (!isset($_GET['id']) || empty($_GET['id'])) {
+    header("Location: consumer.php");
+    exit();
+}
+
+$id = $_GET['id'];
+
+// Fetch user data
+$query = "SELECT * FROM tbl_users WHERE id = :id";
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    header("Location: consumer.php");
+    exit();
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $firstname = $_POST['firstname'];
+    $middlename = $_POST['middlename'];
+    $lastname = $_POST['lastname'];
+    $status = $_POST['status'];
+
+    $updateQuery = "UPDATE tbl_users SET firstname = :firstname, middlename = :middlename, lastname = :lastname, status = :status WHERE id = :id";
+    $stmt = $conn->prepare($updateQuery);
+    $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
+    $stmt->bindParam(':middlename', $middlename, PDO::PARAM_STR);
+    $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+    $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+    if ($stmt->execute()) {
+        header("Location: consumer.php");
+        exit();
+    } else {
+        echo "Error updating user.";
+    }
+}
 ?>
 
-<div class="container-fluid">
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title fw-semibold mb-4">Update User</h5>
-      <a class="btn btn-primary" href="users.php">Back</a><br><br>
-      <?php
-         if($user)
-           { 
-            $user_id = $user->id;
-            $user_name = $user->name;
-            $user_position = $user->position;
-            $user_date = $user->date;
-        ?>
-      <div class="col-lg-12 d-flex align-items-stretch">
-        <div class="card w-100">
-          <div class="card-body">
-            <?php
-                  $msg = Session::get("msg");
-                  if(isset($msg)){
-                    echo $msg;
-                    Session::set("msg", NULL);
-                  }
-              ?> 
-            <form method="post" action="navigate.php?user_id=<?=$user_id;?>">
-              <div class="form-group">
-                <label>Name:</label>
-                <input type="text" class="form-control" name="name" value="<?=($user_name)?$user_name:'';?>" required><br>
-              </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <form method="POST" class="bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Edit User</h2>
 
-              <div class="form-group">
-                <label>Position:</label>
-                <input type="text" class="form-control" name="position" value="<?=($user_position)?$user_position:'';?>" required><br>
-              </div>
+        <label class="block text-gray-700">First Name</label>
+        <input type="text" name="firstname" value="<?php echo htmlspecialchars($user['firstname']); ?>" 
+               class="w-full px-4 py-2 border rounded-lg mb-4" required>
 
-              <div class="form-group">
-                <label>Date:</label>
-                <input type="date" class="form-control" name="date" value="<?=($user_date)?$user_date:'';?>" required><br>
-              </div>
+        <label class="block text-gray-700">Middle Name</label>
+        <input type="text" name="middlename" value="<?php echo htmlspecialchars($user['middlename']); ?>" 
+               class="w-full px-4 py-2 border rounded-lg mb-4">
 
-              <button class="btn btn-primary" type="submit" style="float: right;" name="btn-edit-user">Submit</button>
+        <label class="block text-gray-700">Last Name</label>
+        <input type="text" name="lastname" value="<?php echo htmlspecialchars($user['lastname']); ?>" 
+               class="w-full px-4 py-2 border rounded-lg mb-4" required>
 
-            </form>
-          </div>
-        </div>
-      </div>
-      <?php
-        }
-      ?>
-    </div>
-  </div>
-</div>
-
-<?php 
-  include 'footer.php';
-?>
+        <button type="submit" class="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">
+            Update User
+        </button>
+    </form>
+</body>
+</html>

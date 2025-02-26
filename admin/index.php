@@ -3,10 +3,6 @@ session_start();
 session_regenerate_id(true); // Regenerate session ID for security
 
 include '../conn.php'; // Include the database connection class
-include '../components/header.php';
-
-
-
 // Instantiate the database connection class
 $database = new conn();
 $conn = $database->conn; // Get the PDO connection
@@ -54,86 +50,44 @@ if ($user_role !== 'admin') {
 }
 ?>
 
-
-<title>Admin Panel</title>
-<div class="flex">
-    <?php include 'navbar-a.php'; ?>
-    <div class="flex-1 p-6">
+  
+   
         
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 ">
-    <div class="flex justify-between items-center">
-        <h1 class="text-3xl font-bold">Good Afternoon, <span class="text-black">Admin</span></h1>
-        
-        <input type="date" class="border p-2 rounded" value="<?php echo date('Y-m-d'); ?>">
-    </div>
-    <p class="pb-5">Your performance summary this week</p>
-    
-    <div class="grid grid-cols-4 gap-4 mb-6">
-        <div class="bg-white p-4 rounded shadow-md">
-            <p class="text-gray-600">Bounce Rate</p>
-            <p class="text-2xl font-bold">32.53% <span class="text-red-500">↓ -0.5%</span></p>
-        </div>
-        <div class="bg-white p-4 rounded shadow-md">
-            <p class="text-gray-600">Page Views</p>
-            <p class="text-2xl font-bold">7,682 <span class="text-green-500">↑ +0.1%</span></p>
-        </div>
-        <div class="bg-white p-4 rounded shadow-md">
-            <p class="text-gray-600">New Sessions</p>
-            <p class="text-2xl font-bold">68.8 <span class="text-red-500">↓ 68.8</span></p>
-        </div>
-        <div class="bg-white p-4 rounded shadow-md">
-            <p class="text-gray-600">Avg. Time on Site</p>
-            <p class="text-2xl font-bold">2m:35s <span class="text-green-500">↑ +0.8%</span></p>
-        </div>
-    </div>
-    
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold">Performance Line Chart</h2>
-        <p class="text-gray-500">Lorem Ipsum is simply dummy text of the printing</p>
-        <canvas id="lineChart"></canvas>
-    </div>
-    
-    <div class="grid grid-cols-3 gap-4 mt-6">
-        <div class="bg-blue-600 text-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-bold">Status Summary</h2>
-            <p class="text-2xl">Closed Value: 357</p>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center">
-            <p class="text-xl">Total Visitors</p>
-            <p class="text-2xl font-bold">26.80%</p>
-        </div>
-        <div class="bg-yellow-400 p-6 rounded-lg shadow-md flex justify-center items-center">
-            <button class="text-black font-bold">Upgrade to Pro</button>
-        </div>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-                datasets: [{
-                    label: 'This Week',
-                    data: [100, 200, 300, 150, 250, 350, 200],
-                    borderColor: 'blue',
-                    fill: false
-                }]
-            }
-        });
-    </script>
 
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+    <?php include 'navbar-a.php'; ?>
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <main class="p-6 overflow-auto">
+            <h1 class="text-3xl font-bold pb-5">Good Afternoon, <span class="text-black">Admin</span></h1>
+                <div class="grid grid-cols-3 md-grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white p-4 rounded-lg shadow">Card 1</div>
+                    <div class="bg-white p-4 rounded-lg shadow">Card 2</div>
+                    <div class="bg-white p-4 rounded-lg shadow">Card 3</div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </main>
+
+            <?php include '../components/footer.php'; ?>
+        </div>
     </div>
-</div>
+
+    
+    
 </body>
+
 </html>
-<?php include '../components/footer.php'; ?>
+
+

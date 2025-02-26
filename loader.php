@@ -1,19 +1,21 @@
 <?php
 include("conn.php");
-// Start the session
-session_start();
+// Start session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Instantiate the database connection class
 $database = new conn();
 $conn = $database->conn; // Get the PDO connection
 
-// Default user status
+// Default user details
 $user_status = 'offline';
-$user_name = 'Guest'; // Default name
-$user_role = 'Guest'; // Default role
+$user_name = 'Guest';
+$user_role = 'Guest';
 
 // Check if the user is logged in
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id'])) {  
     $user_id = $_SESSION['user_id'];
 
     // Fetch user details (status, name, role) from the database using PDO
@@ -24,25 +26,39 @@ if (isset($_SESSION['user_id'])) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
+        // Update user session details
         $user_status = $user['status'] ?: 'offline';
-        $user_name = ucfirst($user['firstname']) . ' ' . ucfirst($user['middlename']) . ' ' . ucfirst($user['lastname']);
-        // Capitalize first letter
+        $user_name = trim(ucfirst($user['firstname']) . ' ' . ucfirst($user['middlename']) . ' ' . ucfirst($user['lastname']));
         $user_role = $user['role'];
 
         // Store role in session
         $_SESSION['role'] = $user_role;
 
-        // Redirect based on role
-        if ($user_role === 'admin') {
+        // Ensure only one active session per user
+        $sessionToken = session_id();
+        $updateSession = "UPDATE tbl_users SET session_token = :session_token, status = 'online' WHERE id = :user_id";
+        $stmt = $conn->prepare($updateSession);
+        $stmt->bindParam(':session_token', $sessionToken, PDO::PARAM_STR);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Redirect based on role (priority given to Super Admin)
+        if ($user_role === 's_admin') {
+            $redirectUrl = "super-admin/index.php";
+        } elseif ($user_role === 'admin') {
             $redirectUrl = "admin/index.php";
         } else {
-            $redirectUrl = "index.php";
+            $redirectUrl = "index.php"; // Default redirect
         }
     } else {
-        $redirectUrl = "index.php"; // Redirect if user not found
+        // If user not found, reset session and redirect
+        session_destroy();
+        header("Location: index.php");
+        exit();
     }
 } else {
-    $redirectUrl = "index.php"; // Default for guests
+    // Default redirect for guests
+    $redirectUrl = "index.php";
 }
 
 // Delay before redirecting
@@ -66,33 +82,31 @@ $bgImage = !empty($files) ? $files[array_rand($files)] : 'assets/images/logo.jpg
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
 </head>
 <style>
-        
-        @font-face {
-          font-family: 'Roaster Brush';
-          src: url('assets/font/RoasterBrush.woff2') format('woff2'), /* Best for web */
-               url('assets/font/RoasterBrush.woff') format('woff'),
-               url('assets/font/RoasterBrush.ttf') format('truetype'),
-               url('assets/font/RoasterBrush.otf') format('opentype');
-          font-weight: normal;
-          font-style: normal;
-        }
-      
-        .font-roaster {
-          font-family: 'Roaster Brush', sans-serif;
-        }
-      </style>
-      
-<body class="flex items-center justify-center h-screen bg-cover bg-center bg-[#002D62]">
+    @font-face {
+      font-family: 'Roaster Brush';
+      src: url('assets/font/RoasterBrush.woff2') format('woff2'), 
+           url('assets/font/RoasterBrush.woff') format('woff'),
+           url('assets/font/RoasterBrush.ttf') format('truetype'),
+           url('assets/font/RoasterBrush.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
 
+    .font-roaster {
+      font-family: 'Roaster Brush', sans-serif;
+    }
+</style>
+
+<body class="flex items-center justify-center h-screen bg-cover bg-center bg-[#002D62]">
     <div class="w-96 h-60 flex flex-col items-center justify-center bg-opacity-10 backdrop-blur-lg p-6 text-center animate-fade-in">
-        <img src="assets/images/logos/logo.png" alt="Logo" class="animate-pulse"> <!-- Replace with your actual logo -->
+        <img src="assets/images/logos/logo.png" alt="Logo" class="animate-pulse"> 
         <p class="mt-4 text-lg text-white font-semibold animate-blink">Please wait, loading the site...</p>
-        <p class="text-3xl mt-2 text-[#ffbf00] whitespace-nowrap font-medium font-roaster pt-8">We Serve Because We Care</p> <!-- Added caption -->
+        <p class="text-3xl mt-2 text-[#ffbf00] whitespace-nowrap font-medium font-roaster pt-8">We Serve Because We Care</p> 
     </div>
 
     <!-- Display user welcome message -->
     <p class="absolute bottom-5 text-white text-sm">
-        Welcome Back <?php echo ($user_role === 'admin') ? 'Admin' : $user_name; ?>
+        Welcome Back <?php echo ($user_role === 's_admin') ? 'Super Admin' : ($user_role === 'admin' ? 'Admin' : $user_name); ?>
     </p>
 
     <!-- Animations -->

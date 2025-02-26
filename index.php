@@ -1,7 +1,11 @@
 <?php
-session_start();
 include 'conn.php'; // Include the database connection class
 include 'components/header.php';
+
+// Start session if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Instantiate the database connection class
 $database = new conn();
@@ -22,8 +26,14 @@ if (isset($_SESSION['user_id'])) {
         $user_status = $user['status'];
         $user_role = $user['role'];
 
-        // Redirect admin users to the admin dashboard
-        if ($user_role === 'admin') {
+        // Ensure the user's status is set to 'online'
+        $user_status = 'online';
+
+        // Redirect admin users to the appropriate dashboard
+        if ($user_role === 's_admin') {
+            header("Location: super-admin/index.php");
+            exit(); // Ensure the script stops execution after redirection
+        } elseif ($user_role === 'admin') {
             header("Location: admin/index.php");
             exit(); // Ensure the script stops execution after redirection
         }
@@ -41,6 +51,7 @@ if ($user_status === 'online') {
     include 'components/navbar.php';
 }
 ?>
+
 
 
 <!DOCTYPE html>

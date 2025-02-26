@@ -11,7 +11,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         </a>
 
         <!-- Desktop Menu -->
-<div class="hidden lg:flex items-center justify-center space-x-6 font-bold text-xs">
+<div class="hidden lg:flex items-center justify-center space-x-6 font-bold text-[10px]">
 <a href="<?php echo BASE_URL; ?>index.php" 
    class="relative px-3 py-2 transition-colors duration-300 
           hover:text-yellow-500 
@@ -125,10 +125,20 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <a href="<?php echo BASE_URL; ?>" class="flex items-center">
         <img src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Logo" class="w-auto h-12">
     </a>
+
+    <!-- Spacer to push Logout to the right -->
+    <div class="flex-grow"></div>
+
+    <!-- Logout Button -->
+    <a href="<?php echo BASE_URL; ?>auth/logout.php" class="flex items-center space-x-1 text-white px-3 py-1 rounded-lg hover:text-yellow-500">
+        <i class="fas fa-sign-out-alt text-lg"></i>
+        <span class="text-sm font-bold">LOGOUT</span>
+    </a>
 </div>
 
 
-<div class="fixed z-50 w-full max-w-md md:max-w-lg h-16 max-w-full -translate-x-1/2 bg-gray-900 backdrop-blur-lg bg-opacity-50 border border-gray-200 rounded-full bottom-4 left-1/2 dark:bg-blue-700 dark:border-blue-600 lg:hidden px-4 sm:px-8">
+
+<div class="fixed z-50 w-full max-w-md md:max-w-lg h-16 max-w-full -translate-x-1/2 bg-gray-900 backdrop-blur-lg bg-opacity-50 border border-gray-200 rounded-2xl bottom-4 left-1/2 dark:bg-blue-700 dark:border-blue-600 lg:hidden px-4 sm:px-8">
     <div class="grid h-full max-w-full grid-cols-7 mx-auto">
         <!-- Home -->
         <a href="<?php echo BASE_URL; ?>index.php" 
@@ -141,8 +151,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </a>
 
         <!-- About Us -->
-        <a href="<?php echo BASE_URL; ?>about.php" class="inline-flex flex-col items-center justify-center px-5 rounded-s-full  group">
-            <i class="fas fa-users w-5 h-5 <?php echo ($currentPage == 'about.php.php') ? 'text-white' : 'text-yellow-500'; ?> 
+        <a href="<?php echo BASE_URL; ?>user/about/about.php" class="inline-flex flex-col items-center justify-center px-5 rounded-s-full  group">
+            <i class="fas fa-users w-5 h-5 <?php echo ($currentPage == 'about.php') ? 'text-white' : 'text-yellow-500'; ?> 
               group-hover:text-[#13274F]"></i>
             <span class="sr-only">About Us</span>
         </a>
@@ -164,24 +174,27 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
         <!-- News -->
         <a href="<?php echo BASE_URL; ?>user/news.php" class="inline-flex flex-col items-center justify-center px-5  group">
-            <i class="fas fa-newspaper w-5 h-5 text-yellow-500 group-hover:text-[#13274F]"></i>
+            <i class="fas fa-newspaper w-5 h-5  <?php echo ($currentPage == 'news.php') ? 'text-white' : 'text-yellow-500'; ?> 
+             group-hover:text-[#13274F]"></i>
             <span class="sr-only">News</span>
         </a>
 
         <!-- Downloads -->
-        <a href="<?php echo BASE_URL; ?>user/news.php" class="inline-flex flex-col items-center justify-center px-5  group">
-            <i class="fas fa-download w-5 h-5 text-yellow-500 group-hover:text-[#13274F]"></i>
+        <a href="<?php echo BASE_URL; ?>user/downloads/download.php" class="inline-flex flex-col items-center justify-center px-5  group">
+            <i class="fas fa-download w-5 h-5  <?php echo ($currentPage == 'download.php') ? 'text-white' : 'text-yellow-500'; ?> 
+             group-hover:text-[#13274F]"></i>
             <span class="sr-only">Downloads</span>
         </a>
 
         <!-- Contact -->
         <a href="<?php echo BASE_URL; ?>user/contact.php" class="inline-flex flex-col items-center justify-center px-5 rounded-e-full  group">
-            <i class="fas fa-envelope w-5 h-5 text-yellow-500 group-hover:text-[#13274F]"></i>
+            <i class="fas fa-envelope w-5 h-5  <?php echo ($currentPage == 'contact.php') ? 'text-white' : 'text-yellow-500'; ?>  group-hover:text-[#13274F]"></i>
             <span class="sr-only">Contact</span>
         </a>
 
     </div>
 </div>
+
 
 
 <hr class="border-b-2 border-white mt-0 mb-0">

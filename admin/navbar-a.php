@@ -1,55 +1,119 @@
 <?php $currentPage = basename($_SERVER['REQUEST_URI']); ?>
 
-<!-- Include Alpine.js & Tailwind CSS -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.12.0/dist/cdn.min.js" defer></script>
-<script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Side Navbar -->
-<div x-data="{ isOpen: false, dropdownOpen: false }" class="flex h-screen">
-    <!-- Sidebar -->
-    <div :class="isOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed lg:relative inset-y-0 left-0 bg-[#1a1a2e] text-white w-64 transition-transform duration-300 ease-in-out lg:translate-x-0">
-        <div class="p-6 flex flex-col items-center">
-            <a href="<?php echo BASE_URL; ?>">
-                <img src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Bileco Logo" class="w-auto h-12 max-w-full">
-            </a>
-            <!-- Added Image -->
-             
-            
+<!-- ✨ Desktop Sidebar -->
+<aside id="sidebar-desktop" class="hidden md:flex w-64 bg-[#002244] text-white p-5 flex-col transition-all duration-300">
+    <div class="flex items-center justify-between mb-6">
+        <a href="index.php">
+            <img id="desktop-logo" src="<?php echo BASE_URL; ?>assets/images/logos/logos.png" alt="Logo" class="w-auto h-12 max-w-full sm-h-auto">
+        </a>
+        <button id="toggle-btn" class="text-white p-1 rounded-lg hover:bg-gray-700">
+            <i id="icon" class='bx bxs-chevrons-left'></i>
+        </button>
+    </div>
+    <nav class="flex-1">
+        <ul>
+            <li class="mb-4">
+                <a href="index.php" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500 <?php echo ($currentPage == 'index.php') ? 'bg-yellow-500 font-bold' : ''; ?>">
+                    <i class='bx bx-home'></i><span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="news.php" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500 <?php echo ($currentPage == 'mng-news.php') ? 'bg-yellow-500 font-bold' : ''; ?>">
+                    <i class='bx bx-news'></i><span class="nav-text">News & Event</span>
+                </a>
+            </li>
+        
+            <hr class="mb-4">
+            <li class="mb-4">
+                <a href="<?php echo BASE_URL; ?>auth/logout.php" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500">
+                    <i class='bx bx-exit'></i><span class="nav-text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
 
-<!-- FontAwesome Icons -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-
-        </div>
-        <div class="flex items-center bg-[#1a1a2e] text-white p-4 rounded-lg w-70">
-    <img src="/mnt/data/Screenshot%202025-02-20%20150414.png" alt="User Image" class="w-12 h-12 rounded-full mr-4">
-    <div class="flex-1">
-        <h2 class="text-lg font-semibold">Bileco</h2>
-        <p class="text-gray-400 text-sm">Admin</p>
-    </div>
-    <button class="text-gray-400 hover:text-white">
-        <i class="fas fa-ellipsis-v"></i>
-    </button>
-</div>
-        <hr class="border-white">
-        <nav class="p-4 space-y-4">
-            <a href="index.php" class="block px-4 py-2 text-lg hover:bg-gray-700">Home</a>
-           
-            <a href="dashboard.php" class="block px-4 py-2 text-lg hover:bg-gray-700">Dashboard</a>
-            <hr class="border-white-200">
-            <a href="<?php echo BASE_URL; ?>auth/logout.php" class="block px-4 py-2 text-lg hover:bg-gray-700">Logout</a>
-        </nav>
-    </div>
-    
-    <!-- Main Content -->
-    <div class="flex-1 bg-black flex flex-col fixed">
-        <!-- Top Bar -->
-        <div class=" text-white p-4 flex justify-between items-center lg:hidden">
-            <button @click="isOpen = !isOpen" class="text-[13274F] text-2xl focus:outline-none">
-                <i class="fas fa-bars"></i>
-            </button>
-        </div>
-    </div>
+<!-- ✨ Mobile Sidebar (Icon Only) -->
+<div id="sidebar-mobile" class="md:hidden fixed bottom-0 left-0 w-full bg-[#002244] text-white flex justify-around p-4 shadow-lg rounded-t-lg h-16 items-center">
+    <a href="index.php" class="flex flex-col items-center p-3 rounded-lg w-1/4 <?php echo ($currentPage == 'index.php') ? 'text-yellow-500' : 'hover:bg-gray-700'; ?>">
+        <i class='bx bx-home <?php echo ($currentPage == 'index.php') ? 'text-3xl' : 'text-2xl'; ?>'></i>
+    </a>
+    <a href="mng-news.php" class="flex flex-col items-center p-3 rounded-lg w-1/4 <?php echo ($currentPage == 'mng-news.php') ? 'text-yellow-500' : 'hover:bg-gray-700'; ?>">
+        <i class='bx bx-news <?php echo ($currentPage == 'mng-news.php') ? 'text-3xl' : 'text-2xl'; ?>'></i>
+    </a>
+    <a href="<?php echo BASE_URL; ?>auth/logout.php" class="flex flex-col items-center p-3 rounded-lg w-1/4 hover:bg-gray-700">
+        <i class='bx bx-exit text-2xl'></i>
+    </a>
 </div>
 
-<!-- FontAwesome Icons -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const sidebarDesktop = document.getElementById('sidebar-desktop');
+    const toggleBtn = document.getElementById('toggle-btn');
+    const icon = document.getElementById('icon');
+    const navTextElements = document.querySelectorAll('.nav-text');
+    const menuItems = document.querySelectorAll("#sidebar-desktop ul li a");
+
+    let sidebarState = localStorage.getItem("sidebarState") || "expanded";
+
+    function applySidebarState(state) {
+        if (window.innerWidth <= 768) {
+            sidebarDesktop.classList.add('hidden'); // Hide desktop sidebar on mobile
+        } else {
+            sidebarDesktop.classList.remove('hidden');
+            if (state === "collapsed") {
+                sidebarDesktop.classList.add('w-16');
+                sidebarDesktop.classList.remove('w-64');
+                icon.classList.replace('bxs-chevrons-left', 'bxs-chevrons-right');
+                navTextElements.forEach(element => element.classList.add("hidden"));
+                menuItems.forEach(item => item.classList.add("justify-center"));
+            } else {
+                sidebarDesktop.classList.add('w-64');
+                sidebarDesktop.classList.remove('w-16');
+                icon.classList.replace('bxs-chevrons-right', 'bxs-chevrons-left');
+                setTimeout(() => {
+                    navTextElements.forEach((element, index) => {
+                        setTimeout(() => element.classList.remove("hidden"), index * 50);
+                    });
+                }, 300);
+                menuItems.forEach(item => item.classList.remove("justify-center"));
+            }
+        }
+    }
+
+    applySidebarState(sidebarState);
+
+    window.addEventListener("resize", () => {
+        setTimeout(() => applySidebarState(localStorage.getItem("sidebarState") || "expanded"), 100);
+    });
+
+    toggleBtn.addEventListener("click", () => {
+        if (window.innerWidth <= 768) return; // Prevent toggling in mobile view
+
+        if (sidebarDesktop.classList.contains('w-16')) {
+            sidebarDesktop.classList.remove('w-16');
+            sidebarDesktop.classList.add('w-64');
+            icon.classList.replace('bxs-chevrons-right', 'bxs-chevrons-left');
+            localStorage.setItem("sidebarState", "expanded");
+
+            setTimeout(() => {
+                navTextElements.forEach((element, index) => {
+                    setTimeout(() => element.classList.remove("hidden"), index * 50);
+                });
+            }, 300);
+
+            menuItems.forEach(item => item.classList.remove("justify-center"));
+        } else {
+            navTextElements.forEach(element => element.classList.add("hidden"));
+            sidebarDesktop.classList.add('w-16');
+            sidebarDesktop.classList.remove('w-64');
+            icon.classList.replace('bxs-chevrons-left', 'bxs-chevrons-right');
+            localStorage.setItem("sidebarState", "collapsed");
+            menuItems.forEach(item => item.classList.add("justify-center"));
+        }
+    });
+});
+</script>

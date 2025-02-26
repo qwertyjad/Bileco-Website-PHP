@@ -32,10 +32,10 @@ if ($otpData) {
 $otpResentMessage = "";
 if (isset($_SESSION['otp_resent'])) {
     $otpResentMessage = "OTP has been resent successfully! Check your email.";
-    unset($_SESSION['otp_resent']); // Clear session variable after use
+    unset($_SESSION['otp_resent']);
 } elseif (isset($_SESSION['otp_error'])) {
     $otpResentMessage = $_SESSION['otp_error'];
-    unset($_SESSION['otp_error']); // Clear session variable after use
+    unset($_SESSION['otp_error']);
 }
 ?>
 
@@ -67,27 +67,35 @@ if (isset($_SESSION['otp_resent'])) {
         window.onload = startTimer;
     </script>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
-    <div class="bg-white p-8 rounded-xl shadow-lg w-96">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">OTP Verification</h2>
-        <p class="text-center text-gray-600 mb-4">A One-Time Password has been sent to <b><?php echo $email; ?></b></p>
-        
-        <form method="POST" action="verifying.php">
-            <div class="flex justify-center space-x-2 mb-4">
-                <?php for ($i = 0; $i < 6; $i++): ?>
-                    <input type="text" name="otp[]" maxlength="1" class="w-10 h-10 text-center text-lg border rounded" required>
-                <?php endfor; ?>
-            </div>
-            <p class="text-center text-gray-500">Resend OTP in <span id="timer" class="text-red-500 font-bold"></span></p>
-            <button type="submit" name="verify" class="w-full bg-blue-500 text-white py-2 rounded-lg mt-4">Verify OTP</button>
-        </form>
-        <form method="POST" action="resend.php" class="text-center mt-4">
-            <button type="submit" name="resend" id="resendBtn" class="text-blue-500 hover:underline" disabled>Resend OTP</button>
-        </form>
+<body class="bg-gradient-to-br from-yellow-400 via-blue-300 to-[#13274F] flex justify-center items-center min-h-screen">
+    <div class="bg-white p-8 rounded-xl shadow-lg flex flex-col md:flex-row w-full max-w-3xl ">
+        <!-- Left Side: SVG Illustration -->
+        <div class="hidden md:flex justify-center items-center w-1/2 border-r border-black ">
+        <img src="../assets/images/png/otp.svg" alt="OTP Security" class="w-80">
+        </div>
+
+        <!-- Right Side: OTP Form -->
+        <div class="w-full md:w-1/2 p-6">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-700">OTP Verification</h2>
+            <p class="text-center text-gray-600 mb-4">A One-Time Password has been sent to <b><?php echo $email; ?></b></p>
+            
+            <form method="POST" action="verifying.php">
+                <div class="flex justify-center space-x-2 mb-4">
+                    <?php for ($i = 0; $i < 6; $i++): ?>
+                        <input type="text" name="otp[]" maxlength="1" class="otp-box w-10 h-10 text-center text-lg border rounded focus:ring-2 focus:ring-blue-400 outline-none" required>
+                    <?php endfor; ?>
+                </div>
+                <p class="text-center text-gray-500">Resend OTP in <span id="timer" class="text-red-500 font-bold"></span></p>
+                <button type="submit" name="verify" class="w-full bg-blue-500 text-white py-2 rounded-lg mt-4">Verify OTP</button>
+            </form>
+            <form method="POST" action="resend.php" class="text-center mt-4">
+                <button type="submit" name="resend" id="resendBtn" class="text-blue-500 hover:underline" disabled>Resend OTP</button>
+            </form>
+        </div>
     </div>
 
     <!-- Toast Notification -->
-    <div id="toast" class="hidden fixed center-5 top-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
+    <div id="toast" class="hidden fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg">
         <?php echo $otpResentMessage; ?>
     </div>
 
@@ -105,21 +113,21 @@ if (isset($_SESSION['otp_resent'])) {
                 window.location.href = 'login.php'; // Redirect after success
             }, 5000);
         <?php unset($_SESSION['otp_success']); endif; ?>
-</script>
-<script>
+    </script>
+
+    <script>
         <?php if (isset($_SESSION['otp_error'])): ?>
             Swal.fire({
                 icon: 'error',
                 background: '#f8d7da',
-                color: '#721c24'
+                color: '#721c24',
                 title: '<?php echo $_SESSION['otp_error']; ?>'
             });
         <?php unset($_SESSION['otp_error']); endif; ?>
  
-        window.onload = function() {
-            startTimer(); // Start the timer on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            startTimer();
 
-            // Show toast message if present
             const toastMessage = "<?php echo $otpResentMessage; ?>";
             if (toastMessage) {
                 const toast = document.getElementById('toast');
@@ -128,7 +136,37 @@ if (isset($_SESSION['otp_resent'])) {
                     toast.classList.add('hidden');
                 }, 3000);
             }
-        };
+
+            const inputs = document.querySelectorAll(".otp-box");
+
+            inputs.forEach((input, index) => {
+                input.addEventListener("input", (e) => {
+                    if (e.inputType === "insertFromPaste") {
+                        let pastedData = e.target.value.trim();
+                        if (/^\d{6}$/.test(pastedData)) {  
+                            pastedData.split("").forEach((num, i) => {
+                                if (inputs[i]) {
+                                    inputs[i].value = num;
+                                }
+                            });
+                            inputs[5].focus(); 
+                        }
+                        return;
+                    }
+                    if (e.target.value.length === 1) {
+                        if (index < inputs.length - 1) {
+                            inputs[index + 1].focus();
+                        }
+                    }
+                });
+
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Backspace" && !input.value && index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
