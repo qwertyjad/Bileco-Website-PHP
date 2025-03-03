@@ -1,9 +1,39 @@
-<?php
-include '../../conn.php';
-include '../../components/header.php';
-include '../../components/navbar.php';
-?>
 
+<?php
+session_start();
+include '../../conn.php';
+include '../../function.php';
+include '../../components/header.php';
+
+// Instantiate the database connection class
+$database = new conn();
+$conn = $database->conn; // Get the PDO connection
+
+$function = new Functions();
+$newsList = $function->getAllNews();
+
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    // Fetch user status from the database using PDO
+    $query = "SELECT status FROM tbl_users WHERE id = :user_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $stmt->execute();
+    $user_status = $stmt->fetchColumn(); // Fetch only the status column
+
+} else {
+    $user_status = 'offline'; // Default status for guests
+}
+
+// Display the appropriate navbar
+if ($user_status === 'online') {
+    include '../../components/navbar-u.php';
+} else {
+    include '../../components/navbar.php';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,9 +138,21 @@ include '../../components/navbar.php';
             </ul>
 
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
-            <ul>
-                <!-- Add archive links here -->
-            </ul>
+            <ul class="space-y-2">
+            <?php
+            $archives = $function->getArchives(); // Fetch archives from the database
+
+            if (!empty($archives)) {
+                foreach ($archives as $archive) {
+                    echo '<li>
+                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                        </li>';
+                }
+            } else {
+                echo '<li class="text-gray-500">No archives available</li>';
+            }
+            ?>
+        </ul>
         </div>
 
     </div>

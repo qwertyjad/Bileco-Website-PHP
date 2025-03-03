@@ -1,56 +1,42 @@
 <?php
 include 'conn.php'; // Include the database connection class
 include 'components/header.php';
+include 'function.php'; // Include the Functions class
 
 // Start session if not already started
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+Functions::startSessionIfNotStarted();
 
 // Instantiate the database connection class
-$database = new conn();
-$conn = $database->conn; // Get the PDO connection
+$database = new conn();  // Make sure this class exists in conn.php
+$conn = $database->conn; // This initializes the database connection
+$function = new Functions(); // Get the PDO connection
 
 // Check if the user is logged in
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
     // Fetch user status and role from the database using PDO
-    $query = "SELECT status, role FROM tbl_users WHERE id = :user_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch associative array
+    $user = Functions::getUserDetails($conn, $user_id);
 
     if ($user) {
         $user_status = $user['status'];
         $user_role = $user['role'];
 
-        // Ensure the user's status is set to 'online'
-        $user_status = 'online';
-
         // Redirect admin users to the appropriate dashboard
-        if ($user_role === 's_admin') {
-            header("Location: super-admin/index.php");
-            exit(); // Ensure the script stops execution after redirection
-        } elseif ($user_role === 'admin') {
-            header("Location: admin/index.php");
-            exit(); // Ensure the script stops execution after redirection
-        }
+        Functions::redirectBasedOnRole($user_role);
     } else {
         $user_status = 'offline'; // Default status for guests
     }
 } else {
     $user_status = 'offline'; // Default status for guests
 }
+$newsList = $function->getLatestNews(10);
+
 
 // Display the appropriate navbar
-if ($user_status === 'online') {
-    include 'components/navbar-u.php';
-} else {
-    include 'components/navbar.php';
-}
+Functions::includeNavbarBasedOnStatus($user_status);
 ?>
+
 
 
 
@@ -123,7 +109,7 @@ if ($user_status === 'online') {
             <!-- Left Side -->
             <div class="text-center md:text-left md:w-3/5">
                 <h1 class="text-center text-lg md:text-2xl lg:text-3xl font-bold uppercase">Biliran Electric Cooperative, Inc.</h1>
-                <h2 class="text-center text-sm md:text-lg mt-1 md:mt-2">Brgy. Caraycaray, Naval, Biliran</h2>
+                <h2 class="text-center text-sm md:text-lg mt-1 md:mt-2 italic font-bold text-white-500">Brgy. Caraycaray, Naval, Biliran</h2>
                 <p class="text-center text-yellow-400 italic text-xl md:text-3xl lg:text-5xl mt-3 md:mt-4 font-roaster">
                     We serve, because we care.
                 </p>
@@ -184,113 +170,167 @@ if ($user_status === 'online') {
 
         <!-- Progress Bars -->
         <div class="mt-6 space-y-4">
-            <!-- Barangay Energization -->
-            <div class="relative w-full bg-gray-300 rounded-full h-6 overflow-hidden">
-                <div class="absolute left-0 top-0 h-full bg-[#002D62] rounded-full flex items-center justify-end px-4" style="width: 100%;">
-                    <span class="text-white font-bold text-lg">100%</span>
-                </div>
-                <span class="absolute inset-0 flex items-center justify-center font-semibold text-gray-800">Barangay Energization</span>
-            </div>
+    <style>
+        .progress-bar {
+            width: 0;
+            transition: width 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-            <!-- Sitio Energization -->
-            <div class="relative w-full bg-gray-300 rounded-full h-6 overflow-hidden">
-                <div class="absolute left-0 top-0 h-full bg-[#002D62] rounded-full flex items-center justify-end px-4" style="width: 92%;">
-                    <span class="text-white font-bold text-lg">92%</span>
-                </div>
-                <span class="absolute inset-0 flex items-center justify-center font-semibold text-gray-800">Sitio Energization</span>
-            </div>
+        @keyframes fillBar {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: var(--final-width);
+            }
+        }
+    </style>
 
-            <!-- House Connection -->
-            <div class="relative w-full bg-gray-300 rounded-full h-6 overflow-hidden">
-                <div class="absolute left-0 top-0 h-full bg-[#002D62] rounded-full flex items-center justify-end px-4" style="width: 94%;">
-                    <span class="text-white font-bold text-lg">94%</span>
-                </div>
-                <span class="absolute inset-0 flex items-center justify-center font-semibold text-gray-800">House Connection</span>
-            </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            function isInViewport(element) {
+                const rect = element.getBoundingClientRect();
+                return rect.top < window.innerHeight && rect.bottom >= 0;
+            }
+
+            function handleScroll() {
+                document.querySelectorAll(".progress-bar").forEach(bar => {
+                    if (isInViewport(bar)) {
+                        bar.style.width = bar.style.getPropertyValue("--final-width");
+                    }
+                });
+            }
+
+            window.addEventListener("scroll", handleScroll);
+            handleScroll();
+        });
+    </script>
+
+    <!-- Barangay Energization -->
+    <div class="relative w-full bg-gray-300 rounded-full h-6 overflow-hidden">
+        <div class="absolute left-0 top-0 h-full bg-[#002D62] rounded-full flex items-center justify-end px-4 progress-bar" style="--final-width: 100%;">
+            <span class="text-white font-bold text-lg">100%</span>
         </div>
+        <span class="absolute inset-0 flex items-center justify-center font-semibold text-white">Barangay Energization</span>
+    </div>
+
+    <!-- Sitio Energization -->
+    <div class="relative w-full bg-gray-300 rounded-full h-6 overflow-hidden">
+        <div class="absolute left-0 top-0 h-full bg-[#002D62] rounded-full flex items-center justify-end px-4 progress-bar" style="--final-width: 92%;">
+            <span class="text-white font-bold text-lg">92%</span>
+        </div>
+        <span class="absolute inset-0 flex items-center justify-center font-semibold text-white">Sitio Energization</span>
+    </div>
+
+    <!-- House Connection -->
+    <div class="relative w-full bg-gray-300 rounded-full h-6 overflow-hidden">
+        <div class="absolute left-0 top-0 h-full bg-[#002D62] rounded-full flex items-center justify-end px-4 progress-bar" style="--final-width: 94%;">
+            <span class="text-white font-bold text-lg">94%</span>
+        </div>
+        <span class="absolute inset-0 flex items-center justify-center font-semibold text-white">House Connection</span>
+    </div>
+</div>
+
     </div>
 </div>
 
 
 
 <!-- News & Sidebar Section -->
-<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-5 pt-20">
-    <!-- News & Events -->
-    <div class="bg-[#002D62] p-4 text-white min-h-[250px]">
-        <h2 class="text-lg font-bold text-yellow-500">NEWS & EVENTS</h2>
-        <ul class="mt-2 space-y-2">
-            <li class="border-b pb-1">
-                <h3 class="font-semibold text-yellow-300 text-sm">BILECO Notice of District Elections</h3>
-                <p class="text-xs">BILECO will be conducting its regular district elections...</p>
-            </li>
-            <li class="border-b pb-1">
-                <h3 class="font-semibold text-yellow-300 text-sm">35th Annual General Membership Assembly</h3>
-                <p class="text-xs">BILECO invites all member-consumer-owners...</p>
-            </li>
-        </ul>
-    </div>
-    
-    <!-- Sidebar Section -->
-    <div class="bg-white p-4 border border-gray-300 min-h-[250px]">
-        <h2 class="text-md font-bold text-[#13274F]">NATIONAL STORIES</h2>
-        <ul class="mt-2 space-y-2 text-xs">
-            <li class="border-b pb-1">35th Annual General Membership Assembly (AGMA)</li>
-            <li class="border-b pb-1">SEN. TULFO AND SANGGUNIANG BAYAN Recognize Effort...</li>
-        </ul>
-    </div>
-    
-    <!-- Additional Section -->
-    <div class="bg-white p-4 border border-gray-300 min-h-[450px] flex flex-col items-center w-full mx-auto">
-        <img src="assets/images/backgrounds/top-banner.png" alt="Top Banner" class="w-full max-w-md object-cover mb-3">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 pt-20 px-4">
+    <!-- NEWS & EVENTS -->
+    <div class="bg-[#002D62] p-5 text-white rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-yellow-500 border-b pb-2">NEWS & EVENTS</h2>
+        <ul class="mt-3 space-y-3">
+            <?php
+            $newsList = $function->getLatestNews(10); // Fetch the latest 5 news items
 
-        <div class="bg-red-600 text-white p-3 rounded-md text-center w-full max-w-sm">
+            foreach ($newsList as $newsItem): ?>
+                <li class="flex items-start space-x-4 border-b pb-3">
+                    <!-- ✅ News Image -->
+                    <?php if (!empty($newsItem['image'])): ?>
+                        <img src="data:image/jpeg;base64,<?php echo base64_encode($newsItem['image']); ?>" 
+                            class="w-20 h-20 object-cover rounded-md">
+                    <?php else: ?>
+                        <img src="default-news.jpg" class="w-20 h-20 object-cover rounded-md">
+                    <?php endif; ?>
+
+                    <!-- ✅ News Content -->
+                    <div>
+                        <h3 class="font-semibold text-yellow-300 text-sm">
+                            <a href="<?= BASE_URL; ?>user/news-details.php?id=<?= $newsItem['id']; ?>" 
+                                class="hover:underline">
+                                <?= htmlspecialchars(substr($newsItem['title'], 0, 40)); ?>...
+                            </a>
+                        </h3>
+                        <p class="text-xs text-gray-200"><?= substr(htmlspecialchars($newsItem['content']), 0, 80); ?>...</p>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <!-- SIDEBAR SECTION -->
+    <div class="bg-white p-5 border border-gray-300 rounded-lg shadow-lg">
+        <img src="assets/images/backgrounds/top-banner.png" alt="Top Banner" 
+            class="w-50 object-cover rounded-lg mb-4 shadow-md">
+
+        <!-- CTA Section -->
+        <div class="bg-red-600 text-white p-4 rounded-md text-center shadow-md">
             <a href="user/drives.php" class="block">
-                <p class="text-md font-bold">What Drives Electricity Rates to Go Up?</p>
+                <p class="text-lg font-bold">What Drives Electricity Rates to Go Up?</p>
             </a>
         </div>
 
-        <!-- Facebook Page Plugin -->
-        <div id="fb-root"></div>
-        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0"></script>
-        
-        <div class="fb-page mt-6" 
-            data-href="https://www.facebook.com/bilecoofficial" 
-            data-tabs="timeline" 
-            data-width="900" 
-            data-height="500" 
-            data-small-header="true" 
-            data-adapt-container-width="true" 
-            data-hide-cover="false" 
-            data-show-facepile="false">
-            <blockquote cite="https://www.facebook.com/bilecoofficial" class="fb-xfbml-parse-ignore">
-                <a href="https://www.facebook.com/bilecoofficial">Biliran Electric Cooperative, Inc.</a>
-            </blockquote>
-        </div>
+        <!-- FACEBOOK PAGE PLUGIN -->
+<div class="w-full flex justify-center mt-6">
+    <!-- Facebook SDK -->
+    <div id="fb-root"></div>
+    <script async defer crossorigin="anonymous" 
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0">
+    </script>
+
+    <!-- Plugin Container -->
+    <div class="fb-page w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg"
+        data-href="https://www.facebook.com/bilecoofficial"
+        data-tabs="timeline"
+        data-width="500"
+        data-height="400" 
+        data-small-header="false"
+        data-adapt-container-width="false"
+        data-hide-cover="false"
+        data-show-facepile="true"
+        style="height: 400px; overflow: hidden;">
+        <blockquote cite="https://www.facebook.com/bilecoofficial" class="fb-xfbml-parse-ignore">
+            <a href="https://www.facebook.com/bilecoofficial">Biliran Electric Cooperative, Inc.</a>
+        </blockquote>
     </div>
 </div>
 
- </div>
+    </div>
+</div>
+
 
 
 
         <div class="bg-blue-200 p-8 mt-10 h-200 pb-0">
-        <div class="flex flex-col md:flex-row items-center">
-            <iframe class="w-full mt-10 md:w-[900px] h-[300px] md:h-[300px]" src="https://www.youtube.com/embed/zAQL3BvPDr4?autoplay=1&mute=1&loop=1&showinfo=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-            <div class="ml-6 flex flex-col w-3/4">
-                <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Power for Progress</h2>
+            <div class="flex flex-col md:flex-row items-center">
+                <iframe class="w-full mt-10 md:w-[900px] h-[300px] md:h-[300px]" src="https://www.youtube.com/embed/zAQL3BvPDr4?autoplay=1&mute=1&loop=1&showinfo=0&modestbranding=1" title="YouTube video player" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                 <div class="ml-6 flex flex-col w-3/4">
+                     <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Power for Progress</h2>
                 <p class="text-gray-800 text-justify">
                     BILECO’s story of struggle and triumph in the landscape of rural electrification is etched in the strata of its past where bringing light to households and villages is a gargantuan and formidable task. The linemen who have been foot soldiers of BILECO since the beginning stood undaunted as they carpentered line after line even in the midst of harsh conditions. Witnessing how homes mushroomed the towns, how communities flourished one after the other and how sleepy municipalities turned into a vibrant and bustling commercial hub, manifested the vital role of electricity and electric cooperatives in rural development.
                     <br><br>
                     Today, electricity is slowly creeping on the outskirts of rural centers and outlying parts of the province. Thanks to Sitio Electrification Program for illuminating the once lifeless households and enclaves. It can be seen that electricity is the harbinger of development as it creates an environment that stimulates and accelerates economic growth.
-                </p>
-                </div>  
-                </div>
-                <div class="flex flex-nowrap justify-center -mt-10">
-    <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[350px] h-[250px]">
-    <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[390px] h-[250px]">
-    <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[390px] h-[250px]">
-    <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[390px] h-[250px]">
-</div>    
+                            </p>
+                            </div>  
+                            </div>
+                            <div class="flex flex-nowrap justify-center -mt-10">
+                <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[350px] h-[250px]">
+                <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[390px] h-[250px]">
+                <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[390px] h-[250px]">
+                <img src="assets/images/backgrounds/posts.png" alt="Descriptive Image" class="max-w-[390px] h-[250px]">
+            </div>    
         </div>
         
 <?php

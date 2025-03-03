@@ -1,54 +1,44 @@
 <?php
-session_start();
 include '../conn.php'; // Include database connection class
 include '../function.php'; // Include Functions class
 include '../components/header.php';
 
+session_start();
+
 // Instantiate database connection
 $database = new conn();
 $conn = $database->conn;
-
-// Fetch all news posts
 $function = new Functions();
-$newsList = $function->getAllNews();
 
-// Pagination settings
-$limit = 9; // Number of news per page
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Get current page
-$offset = ($page - 1) * $limit; // Calculate the offset
+// Fetch filtered news by month/year if applicable
+$date_filter = isset($_GET['date']) ? $_GET['date'] : '';
+$newsList = $function->getNewsByMonth($date_filter);
 
-// Instantiate function class
-$function = new Functions();
-$newsList = $function->getPaginatedNews($limit, $offset);
-$totalNews = $function->getNewsCount();
-$totalPages = ceil($totalNews / $limit);
-
-// Check if user is logged in
+// Check if the user is logged in
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
-    // Fetch user status from database
-    $query = "SELECT status FROM tbl_users WHERE id = :user_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user_status = $stmt->fetchColumn();
-} else {
-    $user_status = 'offline'; // Default status
-}
+    // Fetch user details (status & role)
+    $user = Functions::getUserDetails($conn, $user_id);
 
-// Display appropriate navbar
-if ($user_status === 'online') {
-    include '../components/navbar-u.php';
+    if ($user) {
+        $user_status = $user['status'];
+        $user_role = $user['role'];
+
+        // Redirect admin users to the appropriate dashboard
+        Functions::redirectBasedOnRole($user_role);
+    } else {
+        $user_status = 'offline'; // Default status for guests
+    }
 } else {
-    include '../components/navbar.php';
+    $user_status = 'offline'; // Default status for guests
 }
 
 // Fetch super admin first name
-$superAdminQuery = "SELECT firstname FROM tbl_users WHERE role = 's_admin' LIMIT 1";
-$superAdminStmt = $conn->prepare($superAdminQuery);
-$superAdminStmt->execute();
-$superAdminFirstName = $superAdminStmt->fetchColumn();
+$superAdminFirstName = $function->getSuperAdminFirstName();
+
+// Display the appropriate navbar
+Functions::includeNavbarBasedOnStatus($user_status);
 ?>
 
 <title>Archives</title>
@@ -57,7 +47,10 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
     <div class="container mx-auto py-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Main Content Section -->
         <div class="col-span-3 bg-white p-6 rounded-md">
-            <h2 class="text-3xl font-bold text-[#87CEEB] mb-4">NEWS & EVENTS</h2>
+        <h2 class="text-3xl font-bold text-[#87CEEB] mb-4">MONTHLY ARCHIVES : 
+    <?php echo !empty($date_filter) ? date("F Y", strtotime($date_filter . "-01")) : "Archives"; ?>
+</h2>
+
             <hr class="border-t-4 border-b-4 border-[#ffdb19] mt-1 mb-8">
 
             <!-- News List -->
@@ -66,13 +59,16 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
                     <?php foreach ($newsList as $news): ?>
                         <div class="bg-gray-100 p-4 rounded-md shadow-md flex flex-col h-full">
                             <!-- News Image -->
-                            <?php if (!empty($news['image'])): ?>
-                                <img src="data:image/jpeg;base64,<?php echo base64_encode($news['image']); ?>" class="w-full h-48 object-cover rounded-md mb-3">
-                            <?php else: ?>
-                                <div class="w-full h-48 flex items-center justify-center bg-gray-200 rounded-md">
-                                    <i class="bx bx-image text-5xl text-gray-400"></i>
-                                </div>
-                            <?php endif; ?>
+                            <!-- News Image -->
+<?php if (!empty($news['image'])): ?>
+    <img src="data:image/jpeg;base64,<?php echo base64_encode($news['image']); ?>" 
+         class="w-full h-48 object-cover rounded-md mb-3" alt="News Image">
+<?php else: ?>
+    <div class="w-full h-48 flex items-center justify-center bg-gray-200 rounded-md">
+        <i class="bx bx-image text-5xl text-gray-400"></i>
+    </div>
+<?php endif; ?>
+
 
                             <!-- Admin Name and Date -->
                             <div class="flex justify-between items-center mb-2">
@@ -102,27 +98,6 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
                     <p class="text-gray-500">No news available at the moment.</p>
                 <?php endif; ?>
             </div>
-
-            <!-- Pagination -->
-            <div class="mt-6 flex justify-center space-x-4">
-                <?php if ($page > 1): ?>
-                    <a href="?page=<?php echo ($page - 1); ?>" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                        Previous
-                    </a>
-                <?php endif; ?>
-
-                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                    <a href="?page=<?php echo $i; ?>" class="px-4 py-2 border <?php echo ($i == $page) ? 'bg-blue-500 text-white' : 'bg-gray-100'; ?> rounded-md hover:bg-blue-600">
-                        <?php echo $i; ?>
-                    </a>
-                <?php endfor; ?>
-
-                <?php if ($page < $totalPages): ?>
-                    <a href="?page=<?php echo ($page + 1); ?>" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
-                        Next
-                    </a>
-                <?php endif; ?>
-            </div>
         </div>
 
         <!-- Right Sidebar Section -->
@@ -143,22 +118,23 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Power Rate</a></li>
                 <li><a href="#" class="text-black hover:text-blue-800 text-sm">Uncategorized</a></li>
             </ul>
+
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
             <ul class="space-y-2">
-            <?php
-            $archives = $function->getArchives(); // Fetch archives from the database
+                <?php
+                $archives = $function->getArchives(); // Fetch archives from the database
 
-            if (!empty($archives)) {
-                foreach ($archives as $archive) {
-                    echo '<li>
-                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
-                        </li>';
+                if (!empty($archives)) {
+                    foreach ($archives as $archive) {
+                        echo '<li>
+                                <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                              </li>';
+                    }
+                } else {
+                    echo '<li class="text-gray-500">No archives available</li>';
                 }
-            } else {
-                echo '<li class="text-gray-500">No archives available</li>';
-            }
-            ?>
-        </ul>
+                ?>
+            </ul>
         </div>
     </div>
 

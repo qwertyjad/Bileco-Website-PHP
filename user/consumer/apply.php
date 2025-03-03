@@ -2,11 +2,15 @@
 <?php
 session_start();
 include '../../conn.php';
+include '../../function.php';
 include '../../components/header.php';
 
 // Instantiate the database connection class
 $database = new conn();
 $conn = $database->conn; // Get the PDO connection
+
+$function = new Functions();
+$newsList = $function->getAllNews();
 
 // Check if the user is logged in
 if (isset($_SESSION['user_id'])) {
@@ -136,9 +140,21 @@ if ($user_status === 'online') {
             </ul>
 
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
-            <ul>
-                <!-- Add archive links here -->
-            </ul>
+            <ul class="space-y-2">
+            <?php
+            $archives = $function->getArchives(); // Fetch archives from the database
+
+            if (!empty($archives)) {
+                foreach ($archives as $archive) {
+                    echo '<li>
+                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                        </li>';
+                }
+            } else {
+                echo '<li class="text-gray-500">No archives available</li>';
+            }
+            ?>
+        </ul>
         </div>
 
 
