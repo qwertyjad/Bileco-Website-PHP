@@ -105,14 +105,14 @@ if ($user_status === 'online') {
             </ul>
 
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
-            ul class="space-y-2">
+            <ul class="space-y-2">
             <?php
             $archives = $function->getArchives(); // Fetch archives from the database
 
             if (!empty($archives)) {
                 foreach ($archives as $archive) {
                     echo '<li>
-                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                            <a href="../archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
                         </li>';
                 }
             } else {

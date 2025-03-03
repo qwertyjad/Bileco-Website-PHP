@@ -132,7 +132,7 @@ if ($user_status === 'online') {
             if (!empty($archives)) {
                 foreach ($archives as $archive) {
                     echo '<li>
-                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                            <a href="../archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
                         </li>';
                 }
             } else {
