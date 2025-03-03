@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../../conn.php'; // Include the database connection class
+include '../../function.php';
 include '../../components/header.php';
 
 // Instantiate the database connection class

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../../conn.php'; // Include the database connection class
+include '../../function.php';
 include '../../components/header.php';
 
 // Instantiate the database connection class
@@ -116,7 +117,7 @@ if ($user_status === 'online') {
             if (!empty($archives)) {
                 foreach ($archives as $archive) {
                     echo '<li>
-                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                            <a href="<?php echo BASE_URL; ?>user/archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
                         </li>';
                 }
             } else {
