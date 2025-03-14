@@ -15,7 +15,7 @@ $user_name = 'Guest';
 $user_role = 'Guest';
 
 // Check if the user is logged in
-if (isset($_SESSION['user_id'])) {  
+if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
 
     // Fetch user details (status, name, role) from the database using PDO
@@ -80,28 +80,32 @@ $bgImage = !empty($files) ? $files[array_rand($files)] : 'assets/images/logo.jpg
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script> <!-- Tailwind CSS -->
+    <!-- Preload the custom font -->
+    <link rel="preload" href="assets/font/RoasterBrush.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="assets/font/RoasterBrush.woff" as="font" type="font/woff" crossorigin="anonymous">
+    <link rel="preload" href="assets/font/RoasterBrush.ttf" as="font" type="font/truetype" crossorigin="anonymous">
+    <link rel="preload" href="assets/font/RoasterBrush.otf" as="font" type="font/opentype" crossorigin="anonymous">
+    <style>
+        @font-face {
+            font-family: 'Roaster Brush';
+            src: url('assets/font/RoasterBrush.woff2') format('woff2'),
+                 url('assets/font/RoasterBrush.woff') format('woff'),
+                 url('assets/font/RoasterBrush.ttf') format('truetype'),
+                 url('assets/font/RoasterBrush.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .font-roaster {
+            font-family: 'Roaster Brush', sans-serif;
+        }
+    </style>
 </head>
-<style>
-    @font-face {
-      font-family: 'Roaster Brush';
-      src: url('assets/font/RoasterBrush.woff2') format('woff2'), 
-           url('assets/font/RoasterBrush.woff') format('woff'),
-           url('assets/font/RoasterBrush.ttf') format('truetype'),
-           url('assets/font/RoasterBrush.otf') format('opentype');
-      font-weight: normal;
-      font-style: normal;
-    }
-
-    .font-roaster {
-      font-family: 'Roaster Brush', sans-serif;
-    }
-</style>
-
-<body class="flex items-center justify-center h-screen bg-cover bg-center bg-[#002D62]">
+<body class="flex items-center justify-center h-screen bg-cover bg-center bg-[#002D62]" style="background-image: url('<?php echo $bgImage; ?>');">
     <div class="w-96 h-60 flex flex-col items-center justify-center bg-opacity-10 backdrop-blur-lg p-6 text-center animate-fade-in">
-        <img src="assets/images/logos/logo.png" alt="Logo" class="animate-pulse"> 
+        <img src="assets/images/logos/logo.png" alt="Logo" class="animate-pulse">
         <p class="mt-4 text-lg text-white font-semibold animate-blink">Please wait, loading the site...</p>
-        <p class="text-3xl mt-2 text-[#ffbf00] whitespace-nowrap font-medium font-roaster pt-8">We Serve Because We Care</p> 
+        <p class="text-3xl mt-2 text-[#ffbf00] whitespace-nowrap font-medium font-roaster pt-8">We Serve Because We Care</p>
     </div>
 
     <!-- Display user welcome message -->
@@ -127,6 +131,5 @@ $bgImage = !empty($files) ? $files[array_rand($files)] : 'assets/images/logo.jpg
             animation: blink 1.5s infinite alternate;
         }
     </style>
-
 </body>
 </html>

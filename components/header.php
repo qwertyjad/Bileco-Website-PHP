@@ -9,7 +9,7 @@
     <div class="container mx-auto px-4 flex flex-col items-center md:flex-row md:justify-between text-center">
         <div class="privacy-links md:space-x-4 mb-2 md:mb-0 text-black text-sm">
             <a href="<?php echo BASE_URL; ?>user/privacy.php" class="hover:underline">Privacy Policy</a>
-            <a href="<?php echo BASE_URL; ?>user/bids.php" class="hover:underline">Bids & Awards</a>
+            <a href="<?php echo BASE_URL; ?>user/categories/bids-awards.php" class="hover:underline">Bids & Awards</a>
         </div>
         <div class="social-header flex flex-wrap justify-center space-x-4 text-black">
             <a href="https://facebook.com" target="_blank" class="hover:text-blue-600 inline-flex items-center">

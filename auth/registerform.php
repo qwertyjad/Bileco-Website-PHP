@@ -53,6 +53,66 @@ session_start();
             }
             ?>
         };
+
+        document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("accountnum").addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+        let formattedValue = "";
+
+        if (value.length > 0) formattedValue += value.substring(0, 2); // First 2 digits
+        if (value.length > 2) formattedValue += "-" + value.substring(2, 6); // Next 4 digits
+        if (value.length > 6) formattedValue += "-" + value.substring(6, 10); // Last 4 digits
+
+        e.target.value = formattedValue;
+
+        // Fetch data from API when account number is fully entered
+        if (formattedValue.length === 12) {
+            fetch(`http://10.0.1.247:8090/api/accounts/${formattedValue}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const accountData = data[0]; // Assuming the API returns an array with one object
+
+                        // Split the full name into parts
+                        const fullName = accountData.ACCT_NAME.split(', ');
+                        const lastName = fullName[0];
+                        const firstMiddleName = fullName[1].split(' ');
+
+                        let firstName = '';
+                        let middleName = '';
+
+                        // Process first and middle names
+                        firstMiddleName.forEach(name => {
+                            if (name.endsWith('.')) {
+                                middleName += name + ' ';
+                            } else if (name.includes('/')) {
+                                firstName += name.replace('/', ' / ') + ' ';
+                            } else {
+                                firstName += name + ' ';
+                            }
+                        });
+
+                        // Trim extra spaces
+                        firstName = firstName.trim();
+                        middleName = middleName.trim();
+
+                        document.getElementById("firstname").value = firstName;
+                        document.getElementById("middlename").value = middleName;
+                        document.getElementById("lastname").value = lastName;
+                        document.getElementById("serial").value = accountData.KWHM_SERIAL;
+                        document.getElementById("address").value = accountData.RES_ADDR;
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+    });
+});
+
     </script>
 
     <style>
@@ -100,36 +160,37 @@ session_start();
         <p class="mt-10 text-white text-x font-semibold">Please wait...</p>
     </div>
 
-
-    <!-- Registration Form -->
      <!-- Registration Form -->
-     <section class="w-full max-w-3xl p-8 bg-white rounded-lg shadow-md">
+     <section class="w-full max-w-3xl p-8 bg-gray-200 rounded-lg shadow-md">
         <h2 class="text-4xl font-bold text-center text-gray-700">REGISTER ACCOUNT</h2>
 
         <form action="register.php" method="POST" class="mt-6" onsubmit="showLoader()">
 
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div>
     <label class="text-gray-700" for="accountnum">Account Number</label>
     <input id="accountnum" name="accountnum" type="text" required 
         class="w-full px-4 py-2 mt-1 text-gray-700 border rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none"
         maxlength="12" placeholder="01-2345-6789">
-</div>
+    </div>
 
-<script>
-document.getElementById("accountnum").addEventListener("input", function (e) {
-    let value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-    let formattedValue = "";
+    <script>
+    document.getElementById("accountnum").addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+        let formattedValue = "";
 
-    if (value.length > 0) formattedValue += value.substring(0, 2); // First 2 digits
-    if (value.length > 2) formattedValue += "-" + value.substring(2, 6); // Next 4 digits
-    if (value.length > 6) formattedValue += "-" + value.substring(6, 10); // Last 4 digits
+        if (value.length > 0) formattedValue += value.substring(0, 2); // First 2 digits
+        if (value.length > 2) formattedValue += "-" + value.substring(2, 6); // Next 4 digits
+        if (value.length > 6) formattedValue += "-" + value.substring(6, 10); // Last 4 digits
 
-    e.target.value = formattedValue;
-});
-</script>
+        e.target.value = formattedValue;
+    });
+    </script>
 
-
+                <div>
+                    <label class="text-gray-white" for="serial">Serial</label>
+                    <input id="serial" name="serial" type="serial" readonly  class=" w-full px-4 py-2 mt-1 text-gray-700 border rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none">
+                </div>
                 <div>
                     <label class="text-gray-700" for="email">Email Address</label>
                     <input id="email" name="email" type="email" required class="w-full px-4 py-2 mt-1 text-gray-700 border rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none">

@@ -51,7 +51,7 @@ $superAdminStmt->execute();
 $superAdminFirstName = $superAdminStmt->fetchColumn();
 ?>
 
-<title>Archives</title>
+<title>News</title>
 
 <body class="bg-white">
     <div class="container mx-auto py-6 grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -133,15 +133,15 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
 
             <h2 class="text-xl font-semibold text-black border-l-4 pl-2 border-blue-500 mb-4">Categories</h2>
             <ul class="space-y-2">
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Announcements</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Bids & Awards</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">CSR Programs</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Generation Mix</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Maintenance Schedule</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">National Stories</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">News & Events</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Power Rate</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Uncategorized</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/announcement.php" class="text-black hover:text-blue-800 text-sm">Announcements</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/bids-awards.php" class="text-black hover:text-blue-800 text-sm">Bids & Awards</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/csr-programs.php" class="text-black hover:text-blue-800 text-sm">CSR Programs</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/generation-mix.php" class="text-black hover:text-blue-800 text-sm">Generation Mix</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/maintenance.php" class="text-black hover:text-blue-800 text-sm">Maintenance Schedule</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/national-stories.php" class="text-black hover:text-blue-800 text-sm">National Stories</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/news.php" class="text-black hover:text-blue-800 text-sm font-bold">News & Events</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/power-rate.php" class="text-black hover:text-blue-800 text-sm">Power Rate</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/uncategorized.php" class="text-black hover:text-blue-800 text-sm">Uncategorized</a></li>
             </ul>
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
             <ul class="space-y-2">

@@ -161,25 +161,33 @@ $user_status === 'online' ? include '../components/navbar-u.php' : include '../c
 
             <h2 class="text-xl font-semibold text-black border-l-4 pl-2 border-blue-500 mb-4">Categories</h2>
             <ul class="space-y-2">
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Announcements</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Bids & Awards</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">CSR Programs</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Generation Mix</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Maintenance Schedule</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">National Stories</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">News & Events</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Power Rate</a></li>
-                <li><a href="#" class="text-black hover:text-blue-800 text-sm">Uncategorized</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/announcement.php" class="text-black hover:text-blue-800 text-sm">Announcements</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/bids-awards.php" class="text-black hover:text-blue-800 text-sm">Bids & Awards</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/csr-programs.php" class="text-black hover:text-blue-800 text-sm">CSR Programs</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/generation-mix.php" class="text-black hover:text-blue-800 text-sm">Generation Mix</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/maintenance.php" class="text-black hover:text-blue-800 text-sm">Maintenance Schedule</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/national-stories.php" class="text-black hover:text-blue-800 text-sm">National Stories</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/news.php" class="text-black hover:text-blue-800 text-sm">News & Events</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/power-rate.php" class="text-black hover:text-blue-800 text-sm">Power Rate</a></li>
+                <li><a href="<?php echo BASE_URL; ?>user/categories/uncategorized.php" class="text-black hover:text-blue-800 text-sm">Uncategorized</a></li>
             </ul>
 
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
-            <ul>
-                <li><a href="#" class="hover:underline">February 2025</a></li>
-                <li><a href="#" class="hover:underline">January 2025</a></li>
-                <li><a href="#" class="hover:underline">December 2024</a></li>
-                <li><a href="#" class="hover:underline">November 2024</a></li>
-                <li><a href="#" class="hover:underline">October 2024</a></li>
-            </ul>
+            <ul class="space-y-2">
+            <?php
+            $archives = $function->getArchives(); // Fetch archives from the database
+
+            if (!empty($archives)) {
+                foreach ($archives as $archive) {
+                    echo '<li>
+                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
+                        </li>';
+                }
+            } else {
+                echo '<li class="text-gray-500">No archives available</li>';
+            }
+            ?>
+        </ul>
         </div>
     </div>
 

@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <title><?php echo $id ? 'Edit News' : 'Add News'; ?></title>
 <div class="flex h-screen bg-gray-100">
-    <?php include '../navbar-s.php'; ?>
+    <?php include '../navbar-a.php'; ?>
     <div class="flex-1 overflow-y-auto p-6">
     
     <div class="max-w-6xl mx-auto bg-white p-6 rounded-md shadow-md">

@@ -33,7 +33,7 @@ include $user_status === 'online' ? '../components/navbar-u.php' : '../component
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php if (!empty($results)): ?>
                     <?php foreach ($results as $news): ?>
-                        <div class="bg-white p-4 rounded-md shadow-md flex flex-col h-full">
+                        <div class="bg-gray-200 p-4 rounded-md shadow-md flex flex-col h-full">
                             <!-- News Image -->
                             <?php if (!empty($news['image'])): ?>
                                 <img src="data:image/jpeg;base64,<?php echo base64_encode($news['image']); ?>" 
