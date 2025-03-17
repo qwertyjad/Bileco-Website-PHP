@@ -305,8 +305,8 @@ Functions::includeNavbarBasedOnStatus($user_status);
 </div>
 
 <!-- New Payment Options and Help Section -->
-<section class="bg-white py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="bg-white ">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Payment Options -->
             <div class="bg-white border border-black rounded-lg shadow-md p-6">
@@ -494,7 +494,7 @@ Functions::includeNavbarBasedOnStatus($user_status);
 
 
 <!-- News & Sidebar Section -->
-<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 pt-20 px-4">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
     <!-- NEWS & EVENTS -->
     <div class="bg-[#002D62] p-5 text-white rounded-lg shadow-lg">
         <h2 class="text-xl font-bold text-yellow-500 border-b pb-2">NEWS & EVENTS</h2>
