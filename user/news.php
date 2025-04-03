@@ -8,10 +8,6 @@ include '../components/header.php';
 $database = new conn();
 $conn = $database->conn;
 
-// Fetch all news posts
-$function = new Functions();
-$newsList = $function->getAllNews();
-
 // Pagination settings
 $limit = 9; // Number of news per page
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Get current page
@@ -24,24 +20,39 @@ $totalNews = $function->getNewsCount();
 $totalPages = ceil($totalNews / $limit);
 
 // Check if user is logged in
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
     $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'];
 
-    // Fetch user status from database
-    $query = "SELECT status FROM tbl_users WHERE id = :user_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user_status = $stmt->fetchColumn();
+    // Fetch user status based on user type
+    if ($user_type === 'tbl_users') {
+        $query = "SELECT status FROM tbl_users WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn();
+    } elseif ($user_type === 'tbl_accreditation') {
+        $query = "SELECT online_status FROM tbl_accreditation WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn() ?? 'offline'; // Only online/offline status
+    } else {
+        $user_status = 'offline'; // Fallback for invalid user_type
+    }
 } else {
-    $user_status = 'offline'; // Default status
+    $user_status = 'offline'; // Default status for guests
 }
 
 // Display appropriate navbar
 if ($user_status === 'online') {
-    include '../components/navbar-u.php';
+    if ($user_type === 'tbl_accreditation') {
+        include '../components/navbar-accre.php'; // Navbar for accredited users
+    } else {
+        include '../components/navbar-u.php'; // Navbar for other logged-in users
+    }
 } else {
-    include '../components/navbar.php';
+    include '../components/navbar.php'; // Navbar for guests or offline users
 }
 
 // Fetch super admin first name
@@ -51,8 +62,13 @@ $superAdminStmt->execute();
 $superAdminFirstName = $superAdminStmt->fetchColumn();
 ?>
 
-<title>News</title>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News</title>
+</head>
 <body class="bg-white">
     <div class="container mx-auto py-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Main Content Section -->
@@ -145,20 +161,17 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
             </ul>
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
             <ul class="space-y-2">
-            <?php
-            $archives = $function->getArchives(); // Fetch archives from the database
-
-            if (!empty($archives)) {
-                foreach ($archives as $archive) {
-                    echo '<li>
-                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
-                        </li>';
+                <?php
+                $archives = $function->getArchives();
+                if (!empty($archives)) {
+                    foreach ($archives as $archive) {
+                        echo '<li><a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a></li>';
+                    }
+                } else {
+                    echo '<li class="text-gray-500">No archives available</li>';
                 }
-            } else {
-                echo '<li class="text-gray-500">No archives available</li>';
-            }
-            ?>
-        </ul>
+                ?>
+            </ul>
         </div>
     </div>
 
@@ -167,3 +180,4 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
     include '../components/footer.php';
     ?>
 </body>
+</html>

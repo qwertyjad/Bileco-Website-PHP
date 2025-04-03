@@ -140,12 +140,48 @@ public function deleteNews($id) {
         return $query->fetch(PDO::FETCH_ASSOC); // Ensure accountnum is included
     }
     
-    public static function getUserDetails($conn, $user_id) {
-        $query = "SELECT status, role FROM tbl_users WHERE id = :user_id";
-        $stmt = $conn->prepare($query);
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+    // Fetch user details from tbl_users or tbl_accreditation
+    public static function getUserDetails($conn, $user_id, $user_type = null) {
+        if ($user_type === 'tbl_users') {
+            $query = "SELECT status AS online, role FROM tbl_users WHERE id = :user_id";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } elseif ($user_type === 'tbl_accreditation') {
+            $query = "SELECT status, 'accredited' AS role FROM tbl_accreditation WHERE id = :user_id";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            // If user_type is not set, check both tables
+            // First, check tbl_users
+            $query = "SELECT status AS online, role FROM tbl_users WHERE id = :user_id";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                $_SESSION['user_type'] = 'tbl_users'; // Set user_type in session
+                return $user;
+            }
+
+            // If not found in tbl_users, check tbl_accreditation
+            $query = "SELECT online_status, 'accredited' AS role FROM tbl_accreditation WHERE id = :user_id";
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $accred_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($accred_user) {
+                $_SESSION['user_type'] = 'tbl_accreditation'; // Set user_type in session
+                return $accred_user;
+            }
+
+            return false; // User not found in either table
+        }
     }
 
     public static function redirectBasedOnRole($user_role) {
@@ -158,13 +194,20 @@ public function deleteNews($id) {
         }
     }
 
-    public static function includeNavbarBasedOnStatus($user_status) {
+    // Include the appropriate navbar based on user status, role, and type
+    public static function includeNavbarBasedOnStatus($user_status, $user_role = null, $user_type = null) {
         if ($user_status === 'online') {
-            include 'components/navbar-u.php';
+            if ($user_type === 'tbl_accreditation' && $user_role === 'accredited') {
+                include 'components/navbar-accre.php'; // Navbar for accredited users
+            } else {
+                include 'components/navbar-u.php'; // Navbar for tbl_users (admins, super admins, etc.)
+            }
         } else {
-            include 'components/navbar.php';
+            include 'components/navbar.php'; // Navbar for guests
         }
     }
+
+
      // ✅ Add this function to fetch the latest news
      public function getLatestNews($limit = 5) {
         $sql = "SELECT id, title, content, image, date FROM news ORDER BY date DESC LIMIT :limit";
@@ -687,5 +730,11 @@ public function deleteUncategorized($id) {
     return $stmt->execute();
 }
 
+public function fetchAccreditedUsers($conn) {
+    $query = "SELECT * FROM tbl_accredited_users ORDER BY id DESC";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 }
 ?>

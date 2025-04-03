@@ -21,7 +21,7 @@
             </li>
             <li class="mb-4 relative group">
                 <a href="<?php echo BASE_URL; ?>admin/announcement.php" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500 transition-all duration-200 <?php echo ($currentPage == 'announcement.php') ? 'bg-yellow-500 font-bold' : ''; ?>">
-                    <i class='bx bx-bullhorn text-xl'></i>
+                    <i class='bx bx-home text-xl'></i>
                     <span class="nav-text transition-opacity duration-200">Announcements</span>
                 </a>
                 <span class="tooltip absolute left-16 bg-gray-800 text-white text-sm rounded-lg px-3 py-1 opacity-0 pointer-events-none transition-opacity duration-200 group-hover:opacity-100 z-50">Announcements</span>

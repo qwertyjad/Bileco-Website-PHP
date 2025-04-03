@@ -12,14 +12,19 @@ $conn = $database->conn; // This initializes the database connection
 $function = new Functions(); // Get the PDO connection
 
 // Check if the user is logged in
+$user_status = 'offline'; // Default status for guests
+$user_role = null;
+$user_type = null;
+
 if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'] ?? null; // Get user_type from session (set during login)
 
     // Fetch user status and role from the database using PDO
-    $user = Functions::getUserDetails($conn, $user_id);
+    $user = Functions::getUserDetails($conn, $user_id, $user_type);
 
     if ($user) {
-        $user_status = $user['status'];
+        $user_status = $user['online_status'] ?? 'online'; // Use online_status if available
         $user_role = $user['role'];
 
         // Redirect admin users to the appropriate dashboard
@@ -30,11 +35,13 @@ if (isset($_SESSION['user_id'])) {
 } else {
     $user_status = 'offline'; // Default status for guests
 }
+
 $newsList = $function->getLatestNews(10);
 
 // Display the appropriate navbar
-Functions::includeNavbarBasedOnStatus($user_status);
+Functions::includeNavbarBasedOnStatus($user_status, $user_role, $user_type);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

@@ -40,13 +40,59 @@ if (!$news) {
     exit();
 }
 
-// Check user session
-$user_status = isset($_SESSION['user_id']) ? 'online' : 'offline';
-$user_status === 'online' ? include '../components/navbar-u.php' : include '../components/navbar.php';
+// Check user session and status
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
+    $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'];
+
+    // Fetch user status based on user type
+    if ($user_type === 'tbl_users') {
+        $query = "SELECT status FROM tbl_users WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn() ?: 'offline';
+    } elseif ($user_type === 'tbl_accreditation') {
+        $query = "SELECT online_status FROM tbl_accreditation WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn() ?? 'offline'; // Only online/offline status
+    } else {
+        $user_status = 'offline';
+    }
+} else {
+    $user_status = 'offline';
+}
+
+// Display appropriate navbar
+if ($user_status === 'online') {
+    if ($user_type === 'tbl_accreditation') {
+        include '../components/navbar-accre.php'; // Navbar for accredited users
+    } else {
+        include '../components/navbar-u.php'; // Navbar for other logged-in users
+    }
+} else {
+    include '../components/navbar.php'; // Navbar for guests or offline users
+}
 ?>
 
-<title><?php echo htmlspecialchars($news['title']); ?></title>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo htmlspecialchars($news['title']); ?></title>
+    <style>
+        .news-content p {
+            margin-bottom: 1.5rem; /* Better spacing between paragraphs */
+            line-height: 1.75; /* Improved readability */
+            text-align: justify; /* Justified text */
+            color: #4a5568; /* Slightly darker gray for better contrast */
+            font-size: 1.1rem; /* Slightly larger font size */
+        }
+    </style>
+</head>
 <body class="bg-white">
     <div class="container mx-auto py-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Main Content Section -->
@@ -86,7 +132,7 @@ $user_status === 'online' ? include '../components/navbar-u.php' : include '../c
             </div>
 
             <!-- News Content -->
-            <div class="text-gray-700 text-base leading-relaxed mb-6 text-justify">
+            <div class="news-content text-gray-700 mb-6">
                 <?php echo nl2br(htmlspecialchars($news['content'])); ?>
             </div>
 
@@ -109,21 +155,20 @@ $user_status === 'online' ? include '../components/navbar-u.php' : include '../c
                 <?php endif; ?>
             </div>
 
-           <!-- "You Might Also Like" Section -->
-<h2 class="text-xl font-semibold mt-8 mb-4">You Might Also Like</h2>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <?php foreach ($relatedPosts as $post): ?>
-        <a href="news-details.php?id=<?php echo $post['id']; ?>" class="block bg-white p-4 rounded-md shadow-md hover:shadow-lg transition-shadow">
-            <div>
-                <img src="data:image/jpeg;base64,<?php echo base64_encode($post['image']); ?>" class="w-full h-32 object-cover rounded-md mb-2">
-                <p class="text-blue-600 hover:underline truncate">
-                    <?php echo htmlspecialchars($post['title']); ?>
-                </p>
+            <!-- "You Might Also Like" Section -->
+            <h2 class="text-xl font-semibold mt-8 mb-4">You Might Also Like</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <?php foreach ($relatedPosts as $post): ?>
+                    <a href="news-details.php?id=<?php echo $post['id']; ?>" class="block bg-white p-4 rounded-md shadow-md hover:shadow-lg transition-shadow">
+                        <div>
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($post['image']); ?>" class="w-full h-32 object-cover rounded-md mb-2">
+                            <p class="text-blue-600 hover:underline truncate">
+                                <?php echo htmlspecialchars($post['title']); ?>
+                            </p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
             </div>
-        </a>
-    <?php endforeach; ?>
-</div>
-
 
             <!-- Comment Section -->
             <?php if ($user_status === 'online'): ?>
@@ -148,9 +193,8 @@ $user_status === 'online' ? include '../components/navbar-u.php' : include '../c
                         document.getElementById('toast').style.display = 'none';
                     }, 3000);
                 </script>
-                <?php unset($_SESSION['toast']); ?> <!-- Remove toast after displaying -->
+                <?php unset($_SESSION['toast']); ?>
             <?php endif; ?>
-
         </div>
 
         <!-- Right Sidebar Section -->
@@ -174,20 +218,17 @@ $user_status === 'online' ? include '../components/navbar-u.php' : include '../c
 
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
             <ul class="space-y-2">
-            <?php
-            $archives = $function->getArchives(); // Fetch archives from the database
-
-            if (!empty($archives)) {
-                foreach ($archives as $archive) {
-                    echo '<li>
-                            <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
-                        </li>';
+                <?php
+                $archives = $function->getArchives();
+                if (!empty($archives)) {
+                    foreach ($archives as $archive) {
+                        echo '<li><a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a></li>';
+                    }
+                } else {
+                    echo '<li class="text-gray-500">No archives available</li>';
                 }
-            } else {
-                echo '<li class="text-gray-500">No archives available</li>';
-            }
-            ?>
-        </ul>
+                ?>
+            </ul>
         </div>
     </div>
 
@@ -196,3 +237,4 @@ $user_status === 'online' ? include '../components/navbar-u.php' : include '../c
     include '../components/footer.php';
     ?>
 </body>
+</html>

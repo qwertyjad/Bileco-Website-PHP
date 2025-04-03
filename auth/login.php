@@ -17,12 +17,14 @@ if (isset($_POST['login'])) {
         $error_message = "Please enter both email and password.";
     } else {
         try {
+            // First, check tbl_users
             $sql = "SELECT * FROM tbl_users WHERE email = :email LIMIT 1";
             $stmt = $db->conn->prepare($sql);
             $stmt->execute([':email' => $email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user && password_verify($password, $user['password'])) {
+                // User found in tbl_users
                 if ($user['verified'] == 1) {
                     $session_token = bin2hex(random_bytes(32));
 
@@ -31,6 +33,7 @@ if (isset($_POST['login'])) {
                     $_SESSION['role'] = $user['role'];
                     $_SESSION['user_name'] = ucfirst($user['firstname']) . " " . ucfirst($user['lastname']);
                     $_SESSION['session_token'] = $session_token;
+                    $_SESSION['user_type'] = 'tbl_users'; // Indicate the user is from tbl_users
 
                     // Regenerate session ID to prevent session fixation
                     session_regenerate_id(true);
@@ -43,28 +46,116 @@ if (isset($_POST['login'])) {
                         ':id' => $user['id']
                     ]);
 
-                    // Debugging: Print role before redirection
-                    error_log("User Role: " . $_SESSION['role']); 
-
-                    // Prevent infinite redirects: Check if already on correct page
-                    $currentPage = basename($_SERVER['PHP_SELF']);
-
-                    if ($_SESSION['role'] === 's_admin' && $currentPage !== 'sadmin/index.php') {
-                        header("Location: ../super-admin/index.php");
-                        exit();
-                    } elseif ($_SESSION['role'] === 'admin' && $currentPage !== 'admin/index.php') {
-                        header("Location: ../admin/index.php");
-                        exit();
-                    } elseif ($_SESSION['role'] !== 's_admin' && $_SESSION['role'] !== 'admin' && $currentPage !== 'index.php') {
-                        header("Location: ../index.php");
-                        exit();
+                    // Handle redirect after successful login
+                    if (isset($_GET['redirect'])) {
+                        $redirect = $_GET['redirect'];
+                        // Validate redirect is to user/categories/bids-awards-details.php
+                        if (strpos($redirect, 'user/categories/bids-awards-details.php?id=') === 0) {
+                            header("Location: " . BASE_URL . $redirect);
+                            exit();
+                        }
                     }
 
+                    // Default redirects based on role if no specific redirect
+                    $currentPage = basename($_SERVER['PHP_SELF']);
+                    
+                    if ($_SESSION['role'] === 's_admin' && $currentPage !== 'sadmin/index.php') {
+                        header("Location: " . BASE_URL . "super-admin/index.php");
+                        exit();
+                    } elseif ($_SESSION['role'] === 'admin' && $currentPage !== 'admin/index.php') {
+                        header("Location: " . BASE_URL . "admin/index.php");
+                        exit();
+                    } elseif ($_SESSION['role'] !== 's_admin' && $_SESSION['role'] !== 'admin' && $currentPage !== 'index.php') {
+                        header("Location: " . BASE_URL . "index.php");
+                        exit();
+                    }
                 } else {
                     $error_message = "Your email is not verified. Please check your inbox.";
                 }
             } else {
-                $error_message = "Invalid email or password.";
+                // If not found in tbl_users, check tbl_accreditation
+                $sql = "SELECT * FROM tbl_accreditation WHERE email = :email LIMIT 1";
+                $stmt = $db->conn->prepare($sql);
+                $stmt->execute([':email' => $email]);
+                $accred_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($accred_user && password_verify($password, $accred_user['password'])) {
+                    // Auto-verify if status is "pending" and all documents are provided
+                    if ($accred_user['status'] === 'pending') {
+                        $required_docs = [
+                            'dti_cert',
+                            'tax_payer_id',
+                            'bir_value_added',
+                            'blacklist_cert',
+                            'vat_payments',
+                            'tax_clearance',
+                            'contract_details',
+                            'accreditation_fee'
+                        ];
+                        $all_docs_provided = true;
+
+                        foreach ($required_docs as $doc) {
+                            if ($accred_user[$doc] != 1) {
+                                $all_docs_provided = false;
+                                break;
+                            }
+                        }
+
+                        if ($all_docs_provided) {
+                            // Update status to "verified"
+                            $update_status_sql = "UPDATE tbl_accreditation SET status = 'verified' WHERE id = :id";
+                            $update_status_stmt = $db->conn->prepare($update_status_sql);
+                            $update_status_stmt->execute([':id' => $accred_user['id']]);
+                            $accred_user['status'] = 'verified'; // Update local variable
+                            $success_message = "Your account has been auto-verified!";
+                        }
+                    }
+
+                    // Check if PIN verification is required
+                    if ($accred_user['status'] === 'not verified') {
+                        // Store temporary user data in session for PIN verification
+                        $_SESSION['temp_accred_user'] = [
+                            'id' => $accred_user['id'],
+                            'email' => $accred_user['email'],
+                            'firstname' => $accred_user['firstname'],
+                            'lastname' => $accred_user['lastname'],
+                            'pin' => $accred_user['pin'],
+                            'status' => $accred_user['status']
+                        ];
+
+                        // Redirect to PIN verification page
+                        header("Location: verify_pin.php");
+                        exit();
+                    } else {
+                        // If status is "pending" or "verified", log in directly
+                        $session_token = bin2hex(random_bytes(32));
+
+                        // Store user details in session
+                        $_SESSION['user_id'] = $accred_user['id'];
+                        $_SESSION['role'] = 'accredited';
+                        $_SESSION['user_name'] = ucfirst($accred_user['firstname']) . " " . ucfirst($accred_user['lastname']);
+                        $_SESSION['session_token'] = $session_token;
+                        $_SESSION['user_type'] = 'tbl_accreditation';
+                        $_SESSION['pin'] = $accred_user['pin'];
+
+                        // Regenerate session ID to prevent session fixation
+                        session_regenerate_id(true);
+
+                        // Update user online_status to "online"
+                        $update_status_sql = "UPDATE tbl_accreditation SET online_status = 'online', session_token = :session_token WHERE id = :id";
+                        $update_status_stmt = $db->conn->prepare($update_status_sql);
+                        $update_status_stmt->execute([
+                            ':session_token' => $session_token,
+                            ':id' => $accred_user['id']
+                        ]);
+
+                        // Redirect to index.php
+                        header("Location: " . BASE_URL . "index.php");
+                        exit();
+                    }
+                } else {
+                    $error_message = "Invalid email or password.";
+                }
             }
         } catch (PDOException $e) {
             $error_message = "Database error: " . $e->getMessage();
@@ -75,9 +166,15 @@ if (isset($_POST['login'])) {
 // Handle logout request
 if (isset($_GET['logout'])) {
     if (isset($_SESSION['user_id'])) {
-        $update_status_sql = "UPDATE tbl_users SET status = 'offline', session_token = NULL WHERE id = :id";
-        $update_status_stmt = $db->conn->prepare($update_status_sql);
-        $update_status_stmt->execute([':id' => $_SESSION['user_id']]);
+        if ($_SESSION['user_type'] === 'tbl_users') {
+            $update_status_sql = "UPDATE tbl_users SET status = 'offline', session_token = NULL WHERE id = :id";
+            $update_status_stmt = $db->conn->prepare($update_status_sql);
+            $update_status_stmt->execute([':id' => $_SESSION['user_id']]);
+        } elseif ($_SESSION['user_type'] === 'tbl_accreditation') {
+            $update_status_sql = "UPDATE tbl_accreditation SET online_status = 'offline', session_token = NULL WHERE id = :id";
+            $update_status_stmt = $db->conn->prepare($update_status_sql);
+            $update_status_stmt->execute([':id' => $_SESSION['user_id']]);
+        }
     }
 
     session_destroy();
@@ -85,7 +182,6 @@ if (isset($_GET['logout'])) {
     exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -149,7 +245,7 @@ if (isset($_GET['logout'])) {
             toast.className = `flex items-center ${colors[type]} text-white p-3 rounded-lg shadow-lg mb-3 transition-all duration-300`;
             toast.innerHTML = `
                 <span class="mr-2">${type === "success" ? "" : ""}</span>
-                <span>${message}</span>
+                <span>${message}</span> 
                 <button onclick="this.parentElement.remove()" class="ml-auto px-2">✖</button>
             `;
 

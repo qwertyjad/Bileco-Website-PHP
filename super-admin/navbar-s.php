@@ -23,16 +23,15 @@ $iconSize = ($currentPage == 'mng-news.php' || $currentPage == 'add-edit-news.ph
                     <i class='bx bx-home'></i><span class="nav-text">Dashboard</span>
                 </a>
             </li>
-            <li class="mb-4">
-                <a href="<?php echo BASE_URL; ?>super-admin/news/mng-news.php" 
-                class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500 <?php echo $newsActive; ?>">
-                    <i class='bx bx-news'></i>
-                    <span class="nav-text">News & Event</span>
-                </a>
-            </li>
+           
             <li class="mb-4">
                 <a href="<?php echo BASE_URL; ?>super-admin/user/mng-user.php" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500 <?php echo ($currentPage == 'mng-user.php') ? 'bg-yellow-500 font-bold' : ''; ?>">
                     <i class='bx bx-group'></i><span class="nav-text">Manage Consumer</span>
+                </a>
+            </li>
+            <li class="mb-4">
+                <a href="<?php echo BASE_URL; ?>super-admin/acrreditation_account/accreditation.php" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-yellow-500 <?php echo ($currentPage == 'accreditation.php') ? 'bg-yellow-500 font-bold' : ''; ?>">
+                    <i class='bx bx-group'></i><span class="nav-text">Register Accreditation</span>
                 </a>
             </li>
             <hr class="mb-4">

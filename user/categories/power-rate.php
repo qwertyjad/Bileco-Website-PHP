@@ -23,24 +23,42 @@ $offset = ($page - 1) * $limit; // Calculate the offset
 $powerRateList = $function->getPaginatedPowerRate($limit, $offset);
 
 // Check if user is logged in
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
     $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'];
 
-    // Fetch user status from database
-    $query = "SELECT status FROM tbl_users WHERE id = :user_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user_status = $stmt->fetchColumn();
+    // Fetch user status based on user type
+    if ($user_type === 'tbl_users') {
+        $query = "SELECT status FROM tbl_users WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn();
+    } elseif ($user_type === 'tbl_accreditation') {
+        $query = "SELECT online_status, status FROM tbl_accreditation WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $user_status = $result['online_status'] ?? 'offline'; // Online/offline status
+        $accred_status = $result['status'] ?? 'not verified'; // Verification status
+    } else {
+        $user_status = 'offline'; // Fallback for invalid user_type
+    }
 } else {
-    $user_status = 'offline'; // Default status
+    $user_status = 'offline'; // Default status for guests
+    $accred_status = null; // No accreditation status for non-logged-in users
 }
 
 // Display appropriate navbar
 if ($user_status === 'online') {
-    include '../../components/navbar-u.php';
+    if ($user_type === 'tbl_accreditation') {
+        include '../../components/navbar-accre.php'; // Navbar for accredited users
+    } else {
+        include '../../components/navbar-u.php'; // Navbar for other logged-in users
+    }
 } else {
-    include '../../components/navbar.php';
+    include '../../components/navbar.php'; // Navbar for guests or offline users
 }
 
 // Fetch super admin first name
@@ -50,8 +68,13 @@ $superAdminStmt->execute();
 $superAdminFirstName = $superAdminStmt->fetchColumn();
 ?>
 
-<title>Power Rate</title>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Power Rate</title>
+</head>
 <body class="bg-white">
     <div class="container mx-auto py-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <!-- Main Content Section -->
@@ -92,9 +115,21 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
                             </h3>
 
                             <!-- Read More -->
-                            <a href="power-rate-details.php?id=<?php echo $powerRate['id']; ?>" class="text-blue-600 hover:underline font-medium mt-auto">
-                                Read More →
-                            </a>
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <?php if ($user_type === 'tbl_accreditation' && $accred_status === 'pending'): ?>
+                                    <button class="text-blue-600 hover:underline font-medium mt-auto" onclick="openVerificationModal(<?php echo $powerRate['id']; ?>)">
+                                        Read More →
+                                    </button>
+                                <?php else: ?>
+                                    <a href="power-rate-details.php?id=<?php echo $powerRate['id']; ?>" class="text-blue-600 hover:underline font-medium mt-auto">
+                                        Read More →
+                                    </a>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <button class="text-blue-600 hover:underline font-medium mt-auto" onclick="openLoginModal(<?php echo $powerRate['id']; ?>)">
+                                    Read More →
+                                </button>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php else: ?>
@@ -145,13 +180,10 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
             <h2 class="text-xl font-semibold text-gray-800 border-l-4 pl-2 border-blue-500 mt-8 mb-4">Archives</h2>
             <ul class="space-y-2">
                 <?php
-                $archives = $function->getArchives(); // Fetch archives from the database
-
+                $archives = $function->getArchives();
                 if (!empty($archives)) {
                     foreach ($archives as $archive) {
-                        echo '<li>
-                                <a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a>
-                            </li>';
+                        echo '<li><a href="archives.php?date=' . $archive['archive_link'] . '" class="text-blue-600 hover:underline">' . $archive['archive_date'] . '</a></li>';
                     }
                 } else {
                     echo '<li class="text-gray-500">No archives available</li>';
@@ -161,9 +193,49 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
         </div>
     </div>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-md shadow-md">
+            <h2 class="text-2xl font-bold mb-4">Please Log In</h2>
+            <p class="mb-4">You need to log in to continue reading.</p>
+            <a id="loginLink" href="<?php echo BASE_URL; ?>auth/login.php" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Log In</a>
+            <button class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 mt-2" onclick="closeLoginModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- Verification Modal for Accredited Users -->
+    <div id="verificationModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-8 rounded-md shadow-md">
+            <h2 class="text-2xl font-bold mb-4">Verification Required</h2>
+            <p class="mb-4">Please be fully verified first to continue.</p>
+            <a href="<?php echo BASE_URL; ?>auth/verify_pin.php" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Verify Now</a>
+            <button class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 mt-2" onclick="closeVerificationModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function openLoginModal(powerRateId) {
+            const loginLink = document.getElementById('loginLink');
+            loginLink.href = '<?php echo BASE_URL; ?>auth/login.php?redirect=user/categories/power-rate-details.php?id=' + powerRateId;
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function openVerificationModal(powerRateId) {
+            document.getElementById('verificationModal').classList.remove('hidden');
+        }
+
+        function closeVerificationModal() {
+            document.getElementById('verificationModal').classList.add('hidden');
+        }
+    </script>
+
     <?php
-    include '../components/links.php';
-    include '../components/footer.php';
+    include '../../components/links.php';
+    include '../../components/footer.php';
     ?>
 </body>
 </html>

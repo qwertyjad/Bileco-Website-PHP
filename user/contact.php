@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 include '../conn.php'; // Include the database connection class
@@ -9,25 +8,39 @@ $database = new conn();
 $conn = $database->conn; // Get the PDO connection
 
 // Check if the user is logged in
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
     $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'];
 
-    // Fetch user status from the database using PDO
-    $query = "SELECT status FROM tbl_users WHERE id = :user_id";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user_status = $stmt->fetchColumn(); // Fetch only the status column
-
+    // Fetch user status based on user type
+    if ($user_type === 'tbl_users') {
+        $query = "SELECT status FROM tbl_users WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn(); // Fetch the status column (online/offline)
+    } elseif ($user_type === 'tbl_accreditation') {
+        $query = "SELECT online_status FROM tbl_accreditation WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn(); // Fetch the online_status column (online/offline)
+    } else {
+        $user_status = 'offline'; // Fallback in case user_type is invalid
+    }
 } else {
-    $user_status = 'offline'; // Default status for guests
+    $user_status = 'offline'; // Default status for guests or if session data is missing
 }
 
 // Display the appropriate navbar
 if ($user_status === 'online') {
-    include '../components/navbar-u.php';
+    if ($user_type === 'tbl_accreditation') {
+        include '../components/navbar-accre.php'; // Navbar for accredited users
+    } else {
+        include '../components/navbar-u.php'; // Navbar for other logged-in users (e.g., tbl_users)
+    }
 } else {
-    include '../components/navbar.php';
+    include '../components/navbar.php'; // Navbar for guests or offline users
 }
 ?>
 <!DOCTYPE html>

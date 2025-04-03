@@ -17,23 +17,66 @@ if (!empty($search_query)) {
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+// Check if user is logged in
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_type'])) {
+    $user_id = $_SESSION['user_id'];
+    $user_type = $_SESSION['user_type'];
+
+    // Fetch user status based on user type
+    if ($user_type === 'tbl_users') {
+        $query = "SELECT status FROM tbl_users WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn() ?: 'offline';
+    } elseif ($user_type === 'tbl_accreditation') {
+        $query = "SELECT online_status FROM tbl_accreditation WHERE id = :user_id";
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user_status = $stmt->fetchColumn() ?? 'offline'; // Only online/offline status
+    } else {
+        $user_status = 'offline';
+    }
+} else {
+    $user_status = 'offline';
+}
+
 // Include header and navigation bar based on user status
 include '../components/header.php';
-$user_status = isset($_SESSION['user_id']) ? 'online' : 'offline';
-include $user_status === 'online' ? '../components/navbar-u.php' : '../components/navbar.php';
+if ($user_status === 'online') {
+    if ($user_type === 'tbl_accreditation') {
+        include '../components/navbar-accre.php'; // Navbar for accredited users
+    } else {
+        include '../components/navbar-u.php'; // Navbar for other logged-in users
+    }
+} else {
+    include '../components/navbar.php'; // Navbar for guests or offline users
+}
+
+// Fetch super admin first name for consistency with news pages
+$superAdminQuery = "SELECT firstname FROM tbl_users WHERE role = 's_admin' LIMIT 1";
+$superAdminStmt = $conn->prepare($superAdminQuery);
+$superAdminStmt->execute();
+$superAdminFirstName = $superAdminStmt->fetchColumn();
 ?>
 
-<title>Search Results</title>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
 <body class="bg-white">
     <div class="container mx-auto py-6">
-        <div class="bg-white p-6">
+        <div class="bg-white p-6 rounded-md">
             <h1 class="text-2xl font-bold text-gray-800 mb-4">Search Results</h1>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php if (!empty($results)): ?>
                     <?php foreach ($results as $news): ?>
-                        <div class="bg-gray-200 p-4 rounded-md shadow-md flex flex-col h-full">
+                        <div class="bg-gray-100 p-4 rounded-md shadow-md flex flex-col h-full">
                             <!-- News Image -->
                             <?php if (!empty($news['image'])): ?>
                                 <img src="data:image/jpeg;base64,<?php echo base64_encode($news['image']); ?>" 
@@ -44,11 +87,15 @@ include $user_status === 'online' ? '../components/navbar-u.php' : '../component
                                 </div>
                             <?php endif; ?>
 
-                            <!-- Date -->
-                            <p class="text-sm text-gray-500 mb-2">
-                                <i class="bx bx-calendar"></i> 
-                                <?php echo date("M d, Y", strtotime($news['date'])); ?>
-                            </p>
+                            <!-- Admin Name and Date -->
+                            <div class="flex justify-between items-center mb-2">
+                                <p class="text-sm text-gray-500">
+                                    <i class="bx bx-user"></i> <?php echo htmlspecialchars($superAdminFirstName); ?>
+                                </p>
+                                <p class="text-sm text-gray-500">
+                                    <i class="bx bx-calendar"></i> <?php echo date("M d, Y", strtotime($news['date'])); ?>
+                                </p>
+                            </div>
 
                             <!-- News Title -->
                             <h3 class="text-lg font-semibold text-gray-800 mb-2">
@@ -59,7 +106,7 @@ include $user_status === 'online' ? '../components/navbar-u.php' : '../component
                             </h3>
 
                             <!-- Read More -->
-                            <a href="news.php?id=<?php echo $news['id']; ?>" 
+                            <a href="news-details.php?id=<?php echo $news['id']; ?>" 
                                class="text-blue-600 hover:underline font-medium mt-auto">
                                 Read More →
                             </a>
@@ -73,7 +120,7 @@ include $user_status === 'online' ? '../components/navbar-u.php' : '../component
     </div>
 
     <script>
-        document.getElementById("search").addEventListener("input", function() {
+        document.getElementById("search")?.addEventListener("input", function() {
             clearTimeout(this.dataset.timer);
             this.dataset.timer = setTimeout(() => {
                 this.form.submit();
@@ -83,3 +130,4 @@ include $user_status === 'online' ? '../components/navbar-u.php' : '../component
 
     <?php include '../components/footer.php'; ?>
 </body>
+</html>

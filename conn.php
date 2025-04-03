@@ -1,8 +1,10 @@
 <?php
 
+
 // Prevent redefinition of the BASE_URL constant
 if (!defined('BASE_URL')) {
     define('BASE_URL', 'http://localhost/crud/');
+
 }
 
 // Prevent class redeclaration
