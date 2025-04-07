@@ -1,7 +1,8 @@
 <?php
 include 'conn.php'; // Include the database connection class
 include 'components/header.php';
-include 'function.php'; // Include the Functions class
+include 'function.php';
+ // Include the Functions class
 
 // Start session if not already started
 Functions::startSessionIfNotStarted();
@@ -596,6 +597,7 @@ Functions::includeNavbarBasedOnStatus($user_status, $user_role, $user_type);
 <?php
 include 'components/links.php';
 include 'components/footer.php';
+include 'chatbot.php'; 
 ?>
 </body>
 </html>

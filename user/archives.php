@@ -141,5 +141,6 @@ Functions::includeNavbarBasedOnStatus($user_status);
     <?php
     include '../components/links.php';
     include '../components/footer.php';
+    include '../chatbot.php';
     ?>
 </body>

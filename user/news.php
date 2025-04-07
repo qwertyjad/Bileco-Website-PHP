@@ -176,6 +176,7 @@ $superAdminFirstName = $superAdminStmt->fetchColumn();
     </div>
 
     <?php
+    include '../chatbot.php';
     include '../components/links.php';
     include '../components/footer.php';
     ?>

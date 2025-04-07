@@ -132,6 +132,8 @@ if ($user_status === 'online') {
     <?php
     include '../components/links.php';
     include '../components/footer.php';
+    include '../chatbot.php';
+ 
     ?>
 </body>
 </html>
