@@ -140,11 +140,11 @@
 
     <!-- Dropdown menu -->
     <ul id="dropdownMenu" class="hidden absolute right-0 mt-3 w-52 p-2 bg-white text-gray-700 shadow-lg rounded-box z-50">
-        <li>
-            <a href="<?php echo BASE_URL; ?>user/dashboard/dashboard.php" class="block px-4 py-2 text-sm hover:bg-gray-200 rounded">
-                Acccount Information
-            </a>
-        </li>
+            <!-- <li>
+                <a href="<?php echo BASE_URL; ?>user/dashboard/dashboard.php" class="block px-4 py-2 text-sm hover:bg-gray-200 rounded">
+                    Acccount Information
+                </a>
+            </li> -->
         <hr>
         <li>
             <a href="<?php echo BASE_URL; ?>auth/logout.php" class="block px-4 py-2 text-sm hover:bg-gray-200 rounded">

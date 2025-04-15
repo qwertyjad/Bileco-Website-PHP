@@ -34,13 +34,13 @@ function formatMonth($billingMonth) {
 ?>
 
 <!-- Chatbot Toggle Button -->
-<button id="chatbot-toggle" class="fixed bottom-6 right-6 bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-5 py-3 rounded-full shadow-lg hover:from-indigo-600 hover:to-blue-700 transition-all duration-300 z-50 flex items-center gap-2">
+<button id="chatbot-toggle" class="fixed bottom-4 right-4 bg-gradient-to-r from-indigo-500 to-blue-600 text-white px-5 py-3 rounded-full shadow-lg hover:from-indigo-600 hover:to-blue-700 transition-all duration-300 z-50 flex items-center gap-2">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5v-2a2 2 0 012-2h10a2 2 0 012 2v2h-4M12 4a8 8 0 100 16 8 8 0 000-16z"></path></svg>
     Chat Now
 </button>
 
 <!-- Chatbot Container -->
-<div id="chatbot-container" class="hidden fixed bottom-20 right-6 w-full max-w-[420px] bg-white rounded-xl shadow-2xl z-50 transition-all duration-300 md:max-w-md">
+<div id="chatbot-container" class="hidden fixed bottom-4 right-4 w-full max-w-[420px] bg-white rounded-xl shadow-2xl z-50 transition-all duration-300 md:max-w-md">
     <div class="bg-yellow-500 text-white p-4 rounded-t-xl flex justify-between items-center">
         <div class="flex items-center gap-2">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2zm0 2c-2.761 0-5 2.239-5 5v2h10v-2c0-2.761-2.239-5-5-5z"></path></svg>
@@ -165,8 +165,8 @@ function formatMonth($billingMonth) {
             height: calc(100vh - 180px);
         }
         #chatbot-toggle {
-            bottom: 10px;
-            right: 10px;
+            bottom: 8px;
+            right: 8px;
         }
     }
 </style>
@@ -179,7 +179,7 @@ function formatMonth($billingMonth) {
     // Chatbot responses
     const responses = {
         'hi': 'Hello! Welcome to BILECO Assistant. How can I assist you today?',
-        'how are you': 'I’m an AI, so I’m always good! How can I help you with BILECO services?',
+        'how are you': 'Icdd I’m an AI, so I’m always good! How can I help you with BILECO services?',
         'bye': 'See you later! Reach out anytime for assistance.',
         'what time is it': 'I don’t have a watch, but I’m here 24/7 for your electric queries!',
         'bill': isLoggedIn ? `Your bill for ${billData['Billing Month'] ? formatMonth(billData['Billing Month']) : 'N/A'} is ₱${billData['Current Month Bill'] ? Number(billData['Current Month Bill']).toFixed(2) : 'N/A'}.` : 'Please log in to view your bill.',
@@ -221,11 +221,11 @@ function formatMonth($billingMonth) {
     const suggestions = document.querySelectorAll('.suggestion-chip');
 
     // Chat history
-    let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+    let chatHistory = JSON.parse(sessionStorage.getItem('chatHistory')) || [];
 
     // Save chat history
     const saveChatHistory = () => {
-        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+        sessionStorage.setItem('chatHistory', JSON.stringify(chatHistory));
     };
 
     // Display chat history
